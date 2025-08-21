@@ -1,10 +1,10 @@
 import Categories from "@/src/components/categories/categories";
+import Doctors from "@/src/components/doctors/doctors";
 import { SearchComponent } from "@/src/components/search/SearchComponent";
 import { Link } from "expo-router";
 import { BellSimpleIcon } from "phosphor-react-native";
 import { useState } from "react";
-import { Alert, Image, StatusBar, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Image, ScrollView, StatusBar, Text, View } from "react-native";
 
 
 
@@ -12,12 +12,11 @@ export default function Home() {
     const [search, setSearch] = useState<string | undefined>();
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-    Alert.alert(`Selecionou ${selectedOption}`)
 
     return (
-        <SafeAreaView className="flex-1 p-6">
+        <ScrollView showsVerticalScrollIndicator={false} className="flex-1 py-5 px-6 bg-slate-50">
             <StatusBar />
-            <View className="flex flex-row justify-between items-center">
+            <View className="flex flex-row justify-between items-center mt-5">
                 <Image className="w-2/4 h-10" source={require("@/src/assets/logo.png")} />
                 <BellSimpleIcon size={32} />
             </View>
@@ -31,7 +30,22 @@ export default function Home() {
                 </Link>
             </View>
 
-            <Categories setSelectedOption={setSelectedOption} selectedOption={selectedOption} /> 
-        </SafeAreaView>
+            <Categories setSelectedOption={setSelectedOption} selectedOption={selectedOption} />
+
+            <View className="mt-4 mb-5 flex flex-row justify-between items-center">
+                <Text className="text-3xl font-medium">Doutores</Text>
+                <Link href={"/(dashboard)"}>
+                    <Text className="text-base text-gray-500 font-medium">Ver todos</Text>
+                </Link>
+            </View>
+            <View className="pb-10">
+                <Doctors />
+            </View>
+
+
+
+
+
+        </ScrollView>
     )
 }
