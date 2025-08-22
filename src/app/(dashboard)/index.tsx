@@ -42,10 +42,6 @@ export default function Home() {
                 <Doctors />
             </View>
 
-
-
-
-
         </ScrollView>
     )
 }

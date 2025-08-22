@@ -1,40 +1,27 @@
-import { colors } from "@/src/constants/colorsTheme";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Link } from "expo-router";
+import { Text, View } from "react-native";
 
 
 interface buttonProps {
     textButton: string;
-    onPress: () => void;
+    onPress?: () => void;
+    url?: {pathname: any, id: string};
 }
 
 
 
-export const ButtonDefault = ({ onPress, textButton }: buttonProps) => {
+export const ButtonDefault = ({ onPress, textButton, url }: buttonProps) => {
 
     return (
-        <TouchableOpacity onPress={onPress} style={styles.button}>
-           <Text style={styles.text}>
+        <View className="w-full h-12 bg-blue-500 rounded-full my-4 justify-center items-center">
+        <Link href={{pathname: url?.pathname, params:{id: url?.id}}} 
+        >
+           <Text className="text-white text-lg font-medium ">
             {textButton}
             </Text>
-        </TouchableOpacity>
+        </Link>
+        </View>
     )
 }
 
 
-const styles = StyleSheet.create({
-    button: {
-        marginTop: 10,
-        paddingHorizontal: 20,
-        backgroundColor: colors.green,
-        borderRadius: 30,
-        height: 45,
-        justifyContent: 'center'
-
-    },
-    text: {
-        textAlign: 'center',
-        color: "#fff",
-        fontSize: 16,
-        fontWeight: 500
-    }
-})
