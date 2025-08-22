@@ -25,7 +25,7 @@ export default function SignIn() {
         setLoading(true);
         try {
             
-            router.replace("/(dashboard)");
+            router.replace("/(dashboard)/home");
         } catch (error: any) {
             console.log(`Erro ao iniciar sessão: ${error.response.message}`)
         } finally {
