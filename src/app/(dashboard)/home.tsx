@@ -25,21 +25,21 @@ export default function Home() {
 
             <View className="mt-11 mb-5 flex flex-row justify-between items-center">
                 <Text className="text-3xl font-medium">Categorias</Text>
-                <Link href={"/(dashboard)"}>
+                <Link href={"/home/listCategories"}>
                     <Text className="text-base text-gray-500 font-medium">Ver todas</Text>
                 </Link>
             </View>
 
-            <Categories setSelectedOption={setSelectedOption} selectedOption={selectedOption} />
+            <Categories horizontal={true} setSelectedOption={setSelectedOption} selectedOption={selectedOption} />
 
             <View className="mt-4 mb-5 flex flex-row justify-between items-center">
                 <Text className="text-3xl font-medium">Doutores</Text>
-                <Link href={"/(dashboard)"}>
+                <Link href={"/home/listDoctors"}>
                     <Text className="text-base text-gray-500 font-medium">Ver todos</Text>
                 </Link>
             </View>
             <View className="pb-10">
-                <Doctors />
+                <Doctors horizontal={true} />
             </View>
 
         </ScrollView>

@@ -2,7 +2,7 @@ import { Button } from '@/src/components/button/Button';
 import { PT } from '@/src/constants/calendar';
 import { hours } from '@/src/constants/data';
 import { Picker } from '@react-native-picker/picker';
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { CheckCircleIcon } from 'phosphor-react-native';
 import { useState } from "react";
 import { Alert, Modal, Pressable, Text, View } from "react-native";
@@ -35,14 +35,17 @@ export default function Schedule() {
     const handleSchedule = () => {
         
         if (!seletedHour || !seletedDate) {
-            Alert.alert("Erro", "Por favor, selecione uma data e horário.");
+            Alert.alert("Atenção!", "Por favor, selecione uma data e horário.");
             return;
         }
         setLoarding(true);
         
         try {
             setVisible(true);
-            // router.replace("/(dashboard)/home")
+            setTimeout(() => {
+                setVisible(false);
+                router.replace("/(dashboard)/home")
+            }, 3000);
         } catch (error: any) {
             console.log(`Erro ao agendar: ${error.message}`);
 
@@ -79,10 +82,10 @@ export default function Schedule() {
 
             <Modal
                 visible={visible}
-                // onDismiss={() => setVisible(false)}
-                // onRequestClose={() => setVisible(false)}
-                animationType='slide'
-                // transparent={true}
+                onDismiss={() => setVisible(false)}
+                onRequestClose={() => setVisible(false)}
+                animationType='fade'
+                transparent={true}
                 className="flex-1 justify-center items-center"
             >
                 <View className="flex-1 justify-center items-center bg-black/50 bg-opacity-50 p-6">

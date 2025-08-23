@@ -1,32 +1,67 @@
-import { BabyIcon, BrainIcon, HeartbeatIcon, ToothIcon } from 'phosphor-react-native';
+import { BabyIcon, BandaidsIcon, BoneIcon, BrainIcon, CarrotIcon, EarIcon, EyeIcon, GenderFemaleIcon, HeartbeatIcon, StethoscopeIcon, ToothIcon } from 'phosphor-react-native';
 
 
 
 export const categories = [
     {
         id: 1,
+        name: "Clínico Geral",
+        icon: StethoscopeIcon
+    },
+    {
+        id: 2,
         name: "Cardiologista",
         icon: HeartbeatIcon
     },
     {
-        id: 2,
+        id: 3,
         name: "Estomatologista",
         icon: ToothIcon
     },
     {
-        id: 3,
+        id: 4,
         name: "Neurologista",
         icon: BrainIcon
     },
     {
-        id: 4,
+        id: 5,
         name: "Dermatologista",
+        icon: BandaidsIcon
+    },
+    {
+        id: 6,
+        name: "Pediatra",
+        icon: BabyIcon
+    },
+    {
+        id: 7,
+        name: "Ginecologista",
+        icon: GenderFemaleIcon
+    },
+    {
+        id: 8,
+        name: "Ortopedista",
+        icon: BoneIcon
+    },
+    {
+        id: 9,
+        name: "Oftalmologista",
+        icon: EyeIcon
+    },
+    {
+        id: 10,
+        name: "Psiquiatra",
         icon: BrainIcon
     },
     {
-        id: 5,
-        name: "Pediatra",
-        icon: BabyIcon
+        id: 11,
+        name: "Nutricionista",
+        icon: CarrotIcon
+    },
+    {
+        id: 12,
+        name: "Otorrinolaringologia",
+        icon: EarIcon
     },
 ]
 
@@ -169,6 +204,39 @@ export const doctors = [
             { id: '10', name: 'Consulta para Distúrbios do Sono', price: '2800,00' },
         ],
     },
+    {
+        id: 5,
+        nome: "Dra. Ana Costa",
+        especialidade: "Ginecologista",
+        imagem: require("@/src/assets/doutor-woman.jpg"),
+        about: "Dra. Ana Costa é uma ginecologista dedicada com mais de 18 anos de experiência no cuidado da saúde feminina. Graduada pela Universidade de Brasília, ela se especializou em ginecologia e obstetrícia, oferecendo uma ampla gama de serviços para suas pacientes. Dra. Costa é conhecida por sua abordagem compassiva e atenciosa, criando um ambiente acolhedor para as mulheres que atendem. Ela oferece cuidados abrangentes, desde consultas de rotina até o manejo de condições ginecológicas complexas, sempre focando na prevenção e na educação das pacientes sobre a saúde feminina.",
+        yaersOfExperience: 18,
+        numberOfPatients: 800,
+        rating: 4.8,
+        reviews: 200,
+        location: "Clínica Feminina Vida",
+        contact: "(244) 922 334 455",
+        workingHours: [
+            { day: 'Segunda-feira', hours: '09:00 - 18:00' },
+            { day: 'Terça-feira', hours: '09:00 - 18:00' },
+            { day: 'Quarta-feira', hours: '09:00 - 18:00' },
+            { day: 'Quinta-feira', hours: '09:00 - 18:00' },
+            { day: 'Sexta-feira', hours: '09:00 - 18:00' },
+            { day: 'Sábado', hours: '10:00 - 14:00' },
+            { day: 'Domingo', hours: 'Fechado' },
+        ],
+        services: [
+            { id: '1', name: 'Consulta Ginecológica', price: '2000,00' },
+            { id: '2', name: 'Papanicolau (Exame Preventivo)', price: '1500,00' },
+            { id: '3', name: 'Ultrassonografia Transvaginal', price: '2500,00' },
+            { id: '4', name: 'Colposcopia', price: '2200,00' },
+            { id: '5', name: 'Tratamento Infecções Vaginais', price: '1800,00' },
+            { id: '6', name: 'Consul. Planejamento Familiar', price: '1600,00' },
+            { id: '7', name: 'Consulta para Menopausa', price: '1700,00' },
+            { id: '8', name: 'Consul. para Endometriose', price: '2400,00' },
+            { id: '9', name: 'Consul. Distúrbios Menstruais', price: '1900,00' },
+        ],
+    }
     
 ]
 

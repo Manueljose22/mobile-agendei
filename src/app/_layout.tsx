@@ -10,6 +10,24 @@ export default function RootLayout() {
         <Stack.Screen name="auth" options={{headerShown: false}} />
         <Stack.Screen name="(dashboard)" options={{headerShown: false}} />
         
+        <Stack.Screen name="home/listCategories"  options={{
+          headerShown: true,
+          title: "Categorias",
+          // headerStyle:{backgroundColor: Colors.blue[300]},
+          headerTintColor: "#212121",
+          headerTitleAlign: 'center',
+          headerShadowVisible: false
+          }}  
+        />
+        <Stack.Screen name="home/listDoctors"  options={{
+          headerShown: true,
+          title: "Doutores",
+          // headerStyle:{backgroundColor: Colors.blue[300]},
+          headerTintColor: "#212121",
+          headerTitleAlign: 'center',
+          headerShadowVisible: false
+          }}  
+        />
         <Stack.Screen name="doctor/[id]"  options={{
           headerShown: true,
           title: "Detalhes do Médico",
