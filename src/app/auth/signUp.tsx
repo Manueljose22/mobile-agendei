@@ -1,33 +1,53 @@
 import { Button } from "@/src/components/button/Button";
 import { Header } from "@/src/components/header/header";
 import { Input } from "@/src/components/input/Input";
+import { PatientsServices } from "@/src/services/patient/PatientServices";
+import { useAuthStore } from "@/src/store/useAuthStore";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, router } from "expo-router";
 import { EnvelopeIcon, EyeClosedIcon, EyeIcon, LockIcon, UserIcon } from "phosphor-react-native";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Image, Pressable, StatusBar, Text, View } from "react-native";
+import { Alert, Image, Pressable, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { z } from "zod";
 
 
-// const schema = 
 
+const schema = z.object({
+    name: z.string().min(2, "Nome é obrigatorio."),
+    email: z.string().min(2, "E-mail é obrigatorio."),
+    password: z.string().min(6, "No minimo 6 caracteres"),
+    confirmpassword: z.string().min(6, "No minimo 6 caracteres"),
+}) 
+
+type formData = z.infer<typeof schema>
 
 
 export default function SignIn() {
-    const { control, handleSubmit, register, formState: { errors } } = useForm()
+    const { control, handleSubmit, register, formState: { errors } } = useForm<formData>({resolver: zodResolver(schema)})
     const [isFocus, setIsFocus] = useState<string | null>(null)
     const [isShowPass, setIsShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
+    const {setUser} = useAuthStore();
 
 
 
-    const handleSignUp = () => {
+    const handleSignUp = async (data: formData) => {
+        if (data.password !== data.confirmpassword) {
+            Alert.alert("Atenção", "As senhas são diferentes!")
+            return
+        }
+
         setLoading(true);
         try {
+            const result = await PatientsServices.Register(data);
+            console.log(data);
             
+            setUser(result)
             router.replace("/(dashboard)/home");
         } catch (error: any) {
-            console.log(`Erro ao iniciar sessão: ${error.response.message}`)
+            console.log(`Erro ao registrar-se: ${error.data.response.message}`)
         } finally {
             setLoading(false)
         }
@@ -40,44 +60,46 @@ export default function SignIn() {
             <Header />
 
             <View className="flex justify-between gap-5">
-                <View className={`bg-gray-300 p-1 px-2 rounded-lg flex flex-row items-center ${isFocus === "nome" ? 'border-2 border-blue-400' : 'default'}`}>
+                <View className={`bg-gray-300 p-1 px-2 rounded-lg flex flex-row items-center ${isFocus === "name" ? 'border-2 border-blue-400' : 'default'}`}>
                     <UserIcon color="#212121" size={25} weight="regular" />
                     <Input
                         className="w-[260px] text-base"
-                        name="nome"
+                        {...register("name")}
+                        name={"name"}
                         placeholder={"Ex: António Costa"}
-                        onFocus={() => setIsFocus("nome")}
+                        onFocus={() => setIsFocus("name")}
                         blur={() => setIsFocus(null)}
                         KeyboardType="default"
                         control={control}
-                    // {...register("nome")}
                     />
                 </View>
+                {errors.name && <Text className="text-small text-red-400">{errors.name?.message}</Text>}
                 <View className={`bg-gray-300 max-w-full p-1 px-2 rounded-lg flex flex-row items-center justify-between ${isFocus === "email" ? 'border-2 border-blue-400' : 'default'}`}>
                     <EnvelopeIcon color="#212121" size={25} weight="regular" />
                     <Input
                         className="w-[260px] text-base"
+                        {...register("email")}
                         name="email"
                         placeholder={"exemplo@email.com"}
                         onFocus={() => setIsFocus("email")}
                         blur={() => setIsFocus(null)}
                         KeyboardType="email-address"
                         control={control}
-                    // {...register("email")}
                     />
                 </View>
-                <View className={`bg-gray-300 max-w-full p-1 px-2 rounded-lg flex flex-row items-center justify-between ${isFocus === "senha" ? 'border-2 border-blue-400' : 'default'}`}>
+                {errors.email && <Text className="text-small text-red-400">{errors.email?.message}</Text>}
+                <View className={`bg-gray-300 max-w-full p-1 px-2 rounded-lg flex flex-row items-center justify-between ${isFocus === "password" ? 'border-2 border-blue-400' : 'default'}`}>
                     <LockIcon color="#212121" size={25} weight="regular" />
                     <Input
                         className="w-3/4 text-base"
-                        name="senha"
                         placeholder={"******"}
-                        onFocus={() => setIsFocus("senha")}
+                        onFocus={() => setIsFocus("password")}
                         blur={() => setIsFocus(null)}
                         secureTextEntry={isShowPass ? false : true}
                         control={control}
-                        KeyboardType="default"
-                        // {...register("senha")}
+                        KeyboardType={"default"}
+                        {...register("password")}
+                        name="password"
                     />
                     <Pressable onPress={() => setIsShowPass(!isShowPass)}>
                         {
@@ -86,18 +108,19 @@ export default function SignIn() {
                         }
                     </Pressable>
                 </View>
-                <View className={`bg-gray-300 max-w-full p-1 px-2 rounded-lg flex flex-row items-center justify-between ${isFocus === "confirmesenha" ? 'border-2 border-blue-400' : 'default'}`}>
+                {errors.password && <Text className="text-small text-red-400">{errors.password?.message}</Text>}
+                <View className={`bg-gray-300 max-w-full p-1 px-2 rounded-lg flex flex-row items-center justify-between ${isFocus === "confirmpassword" ? 'border-2 border-blue-400' : 'default'}`}>
                     <LockIcon color="#212121" size={25} weight="regular" />
                     <Input
                         className="w-3/4 text-base"
-                        name="confirmesenha"
+                        {...register("confirmpassword")}
+                        name="confirmpassword"
                         placeholder={"******"}
-                        onFocus={() => setIsFocus("confirmesenha")}
+                        onFocus={() => setIsFocus("confirmpassword")}
                         blur={() => setIsFocus(null)}
                         secureTextEntry={isShowPass ? false : true}
                         control={control}
                         KeyboardType="default"
-                        // {...register("confirmesenha")}
                     />
                     <Pressable onPress={() => setIsShowPass(!isShowPass)}>
                         {
@@ -106,6 +129,7 @@ export default function SignIn() {
                         }
                     </Pressable>
                 </View>
+                {errors.confirmpassword && <Text className="text-small text-red-400">{errors.confirmpassword?.message}</Text>}
                 <Button text="Criar conta" onPress={handleSubmit(handleSignUp)} loading={loading} />
             </View>
 

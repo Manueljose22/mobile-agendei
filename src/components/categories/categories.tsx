@@ -22,7 +22,6 @@ export default function Categories({key,columns, selectedOption, setSelectedOpti
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             horizontal={horizontal}
-            key={key}
             numColumns={columns}
             keyExtractor={(item) => item.id.toString()}
             data={categories}

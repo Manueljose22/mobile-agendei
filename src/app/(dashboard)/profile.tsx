@@ -64,6 +64,7 @@ export default function Profile() {
                     icon={<SignOutIcon size={25} color={Colors.gray[200]} weight="fill" />}
                     linkText="Terminar"
                     linkUrl={{ pathname: "/auth/signIn"}}
+                       
                 />
             </View>
 
