@@ -1,22 +1,53 @@
 
 export type IDoctorsRequest = {
-    name: string;
-    especialty: string;
-    photo: string;
+  name: string;
+  photo: string | null;
+  email: string
+  password: string | null
+  phone: string | null
+  bio: string | null
+  address: string | null
+  yaersOfExperience: number | null
+  numberOfPatients: number | null
+  rating: number | null
+  specialtyId: string
+  hospitalId: string | null
 }
 
-export interface IDoctorsSave {
+export type IDoctorsSave = {
+  id: string;
+  name: string;
+  photo: string | null;
+  email: string
+  password: string | null
+  phone: string | null
+  bio: string | null
+  address: string | null
+  yaersOfExperience: number | null
+  numberOfPatients: number | null
+  rating: number | null
+  Specialty: {
     id: string;
     name: string;
-    especialty: string;
-    photo: string;
+  } | null; 
+  Hospital:{
+    id: string;
+    name: string;
+    address: string | null;
+    phone: string | null;
+    email: string | null;
+    images: {
+      id: string;
+      urlImagem: string;
+    }[];
     createdAt: Date;
-    updatedAt: Date;
+  } | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-
-export interface IDoctorsService {
-    idService: string;
-    description: string;
-    price: number;
+export type IDoctorsService = {
+  idService: string;
+  title: string;
+  price: number;
 }

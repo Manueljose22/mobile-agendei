@@ -1,4 +1,5 @@
 import { Redirect } from "expo-router";
+import * as SecureStore from 'expo-secure-store';
 import { useAuthStore } from "../store/useAuthStore";
 
 export default function Index() {
@@ -7,10 +8,10 @@ export default function Index() {
 
   const { user } = useAuthStore();
 
-  if (user?.token) {
-    authorization = true;
-  } else {
+  if (!SecureStore.getItemAsync("auth")) {
     authorization = false;
+  } else {
+    authorization = true;
   }
 
   return (

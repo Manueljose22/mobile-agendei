@@ -11,17 +11,18 @@ interface InfoContentProps {
         pathname: any;
         params?: Record<string, any>;
     }
+    onPress?: () => void
 }
 
 
 
-export const InfoContent = ({ icon, linkText, linkUrl, color }: InfoContentProps) => {
+export const InfoContent = ({ icon, linkText, linkUrl, color, onPress }: InfoContentProps) => {
     return (
         <View className='border-b border-gray-200' >
-            <Link href={linkUrl}>
+            <Link onPress={onPress} href={linkUrl}>
                 <View className='flex flex-row items-center py-5 gap-3'>
                     {icon}
-                    <Text className={`${color === 'default' ? "text-base ms-2 font-medium" : "text-base ms-2 font-medium text-red-600" }`} >
+                    <Text className={`${color === 'default' ? "text-base ms-2 font-medium" : "text-base ms-2 font-medium text-red-600"}`} >
                         {linkText}
                     </Text>
                 </View>

@@ -38,7 +38,8 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       setUser: (user) => set({ user }),
       logout: () => {
-        set({ user: null })
+        set({ user: null }),
+        secureStore.removeItem("auth")
       },
     }),
     {

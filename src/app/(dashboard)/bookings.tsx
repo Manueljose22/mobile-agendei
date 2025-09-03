@@ -25,9 +25,6 @@ export default function Bookings() {
         }
     }
 
-    console.log(bookings);
-    
-
     useEffect(() => {
         handleLoading();
     }, [])

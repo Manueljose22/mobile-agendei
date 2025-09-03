@@ -1,13 +1,16 @@
 import { InfoContent } from "@/src/components/infoContent/InfoContent";
+import { useAuthStore } from "@/src/store/useAuthStore";
 import { Colors } from "@/src/styles/colors";
 
-import { BellIcon, CreditCardIcon, InfoIcon, PenIcon, SignOutIcon, UserIcon } from "phosphor-react-native";
+import { BellIcon, InfoIcon, PenIcon, SignOutIcon, UserIcon } from "phosphor-react-native";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
 export default function Profile() {
+    const {logout} = useAuthStore();
+
     return (
         <SafeAreaView className="flex-1 bg-white p-5" >
             <View className="flex-row items-center mb-5">
@@ -40,12 +43,6 @@ export default function Profile() {
                     linkText="Editar perfil"
                     linkUrl={{ pathname: "/dashboard/edit-profile", params: { id: "12345" } }}
                 />
-                <InfoContent 
-                    color="default"
-                    icon={<CreditCardIcon size={25} color={Colors.gray[200]} weight="regular" />}
-                    linkText="Pagamentos"
-                    linkUrl={{ pathname: "/dashboard/settings" }}
-                />
                 <InfoContent
                     color="default" 
                     icon={<BellIcon size={25} color={Colors.gray[200]} weight="regular" />}
@@ -63,8 +60,8 @@ export default function Profile() {
                     color="danger"
                     icon={<SignOutIcon size={25} color={Colors.gray[200]} weight="fill" />}
                     linkText="Terminar"
+                    onPress={logout}
                     linkUrl={{ pathname: "/auth/signIn"}}
-                       
                 />
             </View>
 
