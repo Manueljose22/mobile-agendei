@@ -1,4 +1,3 @@
-import { Alert } from "react-native";
 import { Api } from "../../utils/Api";
 import { IDoctorsSave, IDoctorsService } from "./types";
 
@@ -17,12 +16,24 @@ export const DoctorsServices = {
             return data;
 
         } catch (error: any) {
-            Alert.alert(error.response.data.message);
+            // Alert.alert(error.response.data.message);
             throw new Error(error.response.data.message);
         }
     },
 
 
+
+    async getDoctorById(idDoctor: string): Promise<IDoctorsSave> {
+
+        try {
+            const { data } = await Api.get<IDoctorsSave>(`/doctors/${idDoctor}`)
+            return data;
+
+        } catch (error: any) {
+            // Alert.alert(error.response.data.message);
+            throw new Error(error.response.data.message);
+        }
+    },
 
     async getDoctorService(idDoctor: string): Promise<IDoctorsService[]> {
 
@@ -32,7 +43,7 @@ export const DoctorsServices = {
             return data;
 
         } catch (error: any) {
-            Alert.alert(error.response.data.message);
+            // Alert.alert(error.response.data.message);
             throw new Error(error.response.data.message);
         }
     }

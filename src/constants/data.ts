@@ -237,11 +237,11 @@ export const doctors = [
             { id: '9', name: 'Consul. Distúrbios Menstruais', price: '1900,00' },
         ],
     }
-    
+
 ]
 
 export const hours = [
-    { id: '1', hour: '08:00' }, 
+    { id: '1', hour: '08:00' },
     { id: '2', hour: '09:00' },
     { id: '3', hour: '10:00' },
     { id: '4', hour: '11:00' },
@@ -250,5 +250,16 @@ export const hours = [
     { id: '7', hour: '14:00' },
     { id: '8', hour: '15:00' },
     { id: '9', hour: '16:00' },
-    { id: '10',hour: '17:00' },
+    { id: '10', hour: '17:00' },
+]
+
+
+export const workingHours = [
+    { day: 'Segunda-feira', hours: '09:00 - 18:00' },
+    { day: 'Terça-feira', hours: '09:00 - 18:00' },
+    { day: 'Quarta-feira', hours: '09:00 - 18:00' },
+    { day: 'Quinta-feira', hours: '09:00 - 18:00' },
+    { day: 'Sexta-feira', hours: '09:00 - 18:00' },
+    { day: 'Sábado', hours: '10:00 - 14:00' },
+    { day: 'Domingo', hours: 'Fechado' },
 ]
