@@ -3,7 +3,6 @@
 
 
 export interface ICreateAppointments {
-    patientId: string;
     serviceId: string;
     doctorId: string;
     bookingDate: Date;

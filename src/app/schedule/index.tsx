@@ -1,6 +1,7 @@
 import { Button } from '@/src/components/button/Button';
 import { PT } from '@/src/constants/calendar';
 import { hours } from '@/src/constants/data';
+import { AppointmentServices } from '@/src/services/appointments/AppoitmentsService';
 import { Picker } from '@react-native-picker/picker';
 import { router, useLocalSearchParams } from "expo-router";
 import { CheckCircleIcon } from 'phosphor-react-native';
@@ -32,20 +33,25 @@ export default function Schedule() {
         "Dom": { disabled: true },
     };
 
-    const handleSchedule = () => {
-        
+    const handleSchedule = async () => {
+
         if (!seletedHour || !seletedDate) {
             Alert.alert("Atenção!", "Por favor, selecione uma data e horário.");
             return;
         }
         setLoarding(true);
-        
+
         try {
             setVisible(true);
-            setTimeout(() => {
-                setVisible(false);
-                router.replace("/(dashboard)/home")
-            }, 3000);
+            await AppointmentServices.Create({
+                doctorId,
+                serviceId: idService,
+                bookingDate: new Date(seletedDate),
+                bookingHour: seletedHour
+            })
+            setVisible(false);
+            router.replace("/(dashboard)/home")
+
         } catch (error: any) {
             console.log(`Erro ao agendar: ${error.message}`);
 
@@ -84,30 +90,29 @@ export default function Schedule() {
                 visible={visible}
                 onDismiss={() => setVisible(false)}
                 onRequestClose={() => setVisible(false)}
-                animationType='fade'
+                animationType='slide'
                 transparent={true}
                 className="flex-1 justify-center items-center"
             >
-                <View className="flex-1 justify-center items-center bg-black/50 bg-opacity-50 p-6">
-                    <View className="bg-white rounded-2xl p-6 w-full max-w-md items-center">
-                        <CheckCircleIcon size={64} color="#4ade80" weight="fill" />
-                        <Text className="text-lg font-medium text-gray-800 mb-4">Agendamento realizado!</Text>
-                        <Text className="text-gray-600 mb-4 text-center">
-                            Seu agendamento para
-                            <Text className='text-blue-500'>{seletedDate}</Text>
-                            às <Text className='text-blue-500'>{seletedHour}</Text>
-                            foi realizado com sucesso.
-                        </Text>
-                        <Pressable
-                            onPress={() => setVisible(false)}
-                            className="w-32 h-12 bg-blue-500 rounded-full my-4 justify-center items-center"
-                        >
-                            <Text className="text-white font-semibold text-center">OK</Text>
-                        </Pressable>
-                    </View>
+            <View className="flex-1 justify-center items-center bg-black/50 bg-opacity-50 p-6">
+                <View className="bg-white rounded-2xl p-6 w-full max-w-md items-center">
+                    <CheckCircleIcon size={64} color="#4ade80" weight="fill" />
+                    <Text className="text-lg font-medium text-gray-800 mb-4">Agendamento realizado!</Text>
+                    <Text className="text-gray-600 mb-4 text-center">
+                        Seu agendamento para
+                        <Text className='text-blue-500'>{seletedDate}</Text>
+                        às <Text className='text-blue-500'>{seletedHour}</Text>
+                        foi realizado com sucesso.
+                    </Text>
+                    <Pressable
+                        onPress={() => setVisible(false)}
+                        className="w-32 h-12 bg-blue-500 rounded-full my-4 justify-center items-center"
+                    >
+                        <Text className="text-white font-semibold text-center">OK</Text>
+                    </Pressable>
                 </View>
+            </View>
             </Modal>
-
         </SafeAreaView>
     )
 }

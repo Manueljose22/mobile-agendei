@@ -13,7 +13,7 @@ export const AppointmentServices = {
         try {
             await Api.post<ICreateAppointments>("/appointments/", data);
         } catch (error: any) {
-            Alert.alert("Alerta!", error.response.data.message);
+            // Alert.alert("Alerta!", error.response.data.message);
             throw new Error(error.response.data.message);
         }
     },
@@ -25,7 +25,7 @@ export const AppointmentServices = {
             return data
 
         } catch (error: any) {
-            Alert.alert("Alerta", error.response.data.message);
+            // Alert.alert("Alerta", error.response.data.message);
             throw new Error(error.response.data.message);
         }
     },
