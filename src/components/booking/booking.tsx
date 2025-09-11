@@ -1,6 +1,6 @@
 import { Colors } from "@/src/styles/colors";
 import { CalendarIcon, ClockIcon, MapPinIcon } from "phosphor-react-native";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 
 type bookingProps ={
@@ -46,12 +46,12 @@ export const Booking = ({speciality, btnCancel, btnUpdate, day, doctor,photo, ho
                 </View>
             </View>
             <View className="flex-row item-center gap-2">
-                <Pressable onPress={btnCancel} className="bg-red-500 rounded-lg p-3 w-2/4">
+                <TouchableOpacity onPress={btnCancel} className="bg-red-500 rounded-lg p-3 w-2/4">
                     <Text className="text-white text-center font-semibold">Cancelar</Text>
-                </Pressable>
-                <Pressable onPress={btnUpdate} className="bg-blue-500 rounded-lg p-3 w-2/4">
+                </TouchableOpacity>
+                <TouchableOpacity onPress={btnUpdate} className="bg-blue-500 rounded-lg p-3 w-2/4">
                     <Text className="text-white text-center font-semibold">Reagendar</Text>
-                </Pressable>
+                </TouchableOpacity>
             </View>
 
         </View>

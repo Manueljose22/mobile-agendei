@@ -23,15 +23,18 @@ export default function Home() {
     const [specialities, setSpecialities] = useState<ISpecilitySaved[]>();
     const { user } = useAuthStore()
 
+  
+
+
     const loading = async () => {
         try {
             setRefreshing(true)
             const [
-                    listDoctors, 
-                    listSpecialities
-                ] = await Promise.all(
+                listDoctors,
+                listSpecialities
+            ] = await Promise.all(
                 [
-                    DoctorsServices.getAll(), 
+                    DoctorsServices.getAll(),
                     SpecialitysServices.getAll()
                 ]
             );
@@ -40,7 +43,7 @@ export default function Home() {
             setSpecialities(listSpecialities)
         } catch (error: any) {
             console.log("Erro Home: ", error.response.message);
-        } finally{
+        } finally {
             setRefreshing(false)
         }
     }
@@ -52,17 +55,17 @@ export default function Home() {
 
 
     return (
-        <ScrollView 
-            showsVerticalScrollIndicator={false} 
+        <ScrollView
+            showsVerticalScrollIndicator={false}
             className="flex-1 py-5 px-6 bg-slate-50"
-            refreshControl={<RefreshControl 
+            refreshControl={<RefreshControl
                 refreshing={isRefreshing}
                 onRefresh={loading}
                 tintColor={Colors.blue[300]}
                 colors={[Colors.blue[300]]}
             />}
-            >
-            
+        >
+
             <StatusBar />
             <View className="flex flex-row justify-between items-center mt-5">
                 <Image className="w-2/4 h-10" source={require("@/src/assets/logo.png")} />
@@ -77,15 +80,15 @@ export default function Home() {
                     <Text className="text-base text-gray-500 font-medium">Ver todas</Text>
                 </Link>
             </View>
-            
-            <FlatList 
+
+            <FlatList
                 className="max-h-36 mb-6"
                 data={specialities}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item)=> item.id.toString()}
-                renderItem={({item})=>(
-                    <Category 
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <Category
                         icon={specialtyIcons[item.name]}
                         name={item.name}
                         setSelectedOption={setSelectedOption}
@@ -100,13 +103,13 @@ export default function Home() {
                 </Link>
             </View>
             <View className="pb-10">
-                <FlatList 
+                <FlatList
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     data={doctors}
-                    keyExtractor={(item)=> item.id.toString()}
-                    renderItem={({item}) => (
-                        <Doctor 
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <Doctor
                             id={item.id}
                             name={item.name}
                             photo={item.photo!}

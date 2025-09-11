@@ -45,7 +45,6 @@ export default function SignIn() {
         }
     }
 
-
     return (
         <SafeAreaView className="flex-1 flex-col justify-around p-6">
             <StatusBar />

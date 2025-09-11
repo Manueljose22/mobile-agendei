@@ -18,7 +18,7 @@ const login = async (payload: Pick<IRequestPayload, 'email' | 'password'>): Prom
         };
         
     } catch (error: any) {
-        Alert.alert("Erro!", "Erro no servidor, tente mais tarde." )
+        Alert.alert("Erro!", "Erro no servidor, por favor tente mais tarde." )
         throw new Error(error.response.data.message)
     }
 

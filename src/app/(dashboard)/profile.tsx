@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function Profile() {
-    const {logout} = useAuthStore();
+    const {logout, user} = useAuthStore();
 
     return (
         <SafeAreaView className="flex-1 bg-white p-5" >
@@ -32,8 +32,8 @@ export default function Profile() {
                         />
                     </View>
                 </View>
-                <Text className="font-medium text-lg mb-1" >Manuel José</Text>
-                <Text className="text-sm text-gray-600">manuelleonel73@gmail.com</Text>
+                <Text className="font-medium text-lg mb-1" >{user?.name}</Text>
+                <Text className="text-sm text-gray-600">{user?.email}</Text>
             </View>
 
             <View className="flex-1 mt-12 space-y-4">

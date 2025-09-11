@@ -2,6 +2,7 @@ import { Booking } from "@/src/components/booking/booking";
 import { AppointmentServices } from "@/src/services/appointments/AppoitmentsService";
 import { IAppointmentSave } from "@/src/services/appointments/types";
 import { Colors } from "@/src/styles/colors";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, RefreshControl, ScrollView } from "react-native";
 
@@ -13,6 +14,7 @@ export default function Bookings() {
     const [bookings, setBookings] = useState<IAppointmentSave[]>()
     const [isRefreshing, setRefreshing] = useState<boolean>(false)
 
+
     const handleLoading = async () => {
         setRefreshing(true);
         try {
@@ -22,6 +24,18 @@ export default function Bookings() {
             console.log("Erro ao carregar agendamentos: ", error.response.message)
         } finally {
             setRefreshing(false)
+        }
+    }
+
+    const updateBooking = (id: string) =>{
+        router.navigate({pathname: "/schedule", params: {idAppointment: id}});
+    }
+
+    const cancelBooking = async (id: string) =>{
+        try {
+            await AppointmentServices.Cancel(id)
+        } catch (error: any) {
+            console.log(error.response.data.message);
         }
     }
 
@@ -52,8 +66,8 @@ export default function Bookings() {
                         speciality={item.specialty}
                         doctor={item.doctor}
                         hospital={item.hospitalname}
-                        btnCancel={() => ""}
-                        btnUpdate={() => ""}
+                        btnCancel={() => cancelBooking(item.id)}
+                        btnUpdate={() => updateBooking(item.id)}
                     />
                 )}
             />

@@ -1,7 +1,5 @@
-import { Alert } from 'react-native';
 import { Api } from '../../utils/Api';
 import { IAppointmentSave, ICreateAppointments } from './types';
-
 
 
 
@@ -13,7 +11,6 @@ export const AppointmentServices = {
         try {
             await Api.post<ICreateAppointments>("/appointments/", data);
         } catch (error: any) {
-            // Alert.alert("Alerta!", error.response.data.message);
             throw new Error(error.response.data.message);
         }
     },
@@ -25,17 +22,23 @@ export const AppointmentServices = {
             return data
 
         } catch (error: any) {
-            // Alert.alert("Alerta", error.response.data.message);
             throw new Error(error.response.data.message);
         }
     },
 
-    async Cancel(idAppointment: string): Promise<void> {
+    async Reschedule(idAppointment: string, data:{bookingDate: Date, bookingHour: string}): Promise<void> {
         try {
-            await Api.delete(`/appointments/${idAppointment}`);
+            await Api.put(`/appointments/${idAppointment}`, data);
 
         } catch (error: any) {
-            Alert.alert("Erro.", error.response.data.message);
+            throw new Error(error.response.data.message);
+        }
+    },
+    async Cancel(idAppointment: string): Promise<void> {
+        try {
+            await Api.put(`/appointments/${idAppointment}`);
+
+        } catch (error: any) {
             throw new Error(error.response.data.message);
         }
     }
