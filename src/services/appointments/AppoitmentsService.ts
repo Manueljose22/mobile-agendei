@@ -34,9 +34,9 @@ export const AppointmentServices = {
             throw new Error(error.response.data.message);
         }
     },
-    async Cancel(idAppointment: string): Promise<void> {
+    async Cancel(id: string): Promise<void> {
         try {
-            await Api.put(`/appointments/${idAppointment}`);
+            await Api.put(`/appointments/cancel/${id}`);
 
         } catch (error: any) {
             throw new Error(error.response.data.message);

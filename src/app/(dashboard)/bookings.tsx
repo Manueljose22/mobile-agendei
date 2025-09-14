@@ -33,9 +33,12 @@ export default function Bookings() {
 
     const cancelBooking = async (id: string) =>{
         try {
-            await AppointmentServices.Cancel(id)
+            await AppointmentServices.Cancel(id);
+            setRefreshing(true)
         } catch (error: any) {
             console.log(error.response.data.message);
+        }finally{
+            setRefreshing(false)
         }
     }
 

@@ -25,6 +25,7 @@ export default function RootLayout() {
         <Tabs.Screen name="profile" options={{tabBarIcon: ({color})=>(
             <UserIcon weight="fill" color={color} />
         ), tabBarLabel: "Perfil"}}/>
+        
     </Tabs>
   );
 }
