@@ -47,9 +47,9 @@ export const PatientsServices = {
     }
   },
 
-  async updateProfile(data: IUserProfile): Promise<void> {
+  async updateProfile(id: string, data: Partial<IUserProfile>): Promise<void> {
     try {
-      await Api.put<IUserProfile>("/patients/:id", data);
+      await Api.put(`/patients/${id}`, data);
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         const message = error.response?.data?.message;
