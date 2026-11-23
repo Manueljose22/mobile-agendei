@@ -39,7 +39,7 @@ export default function SignIn() {
             setUser(result)
             router.replace("/(dashboard)/home")
         } catch (error: any) {
-            console.log(`Erro ao iniciar sessão: ${error.response.message}`)
+            console.log(`Erro ao iniciar sessão: ${error.message}`)
         } finally {
             setLoading(false)
         }

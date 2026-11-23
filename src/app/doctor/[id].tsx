@@ -21,7 +21,7 @@ export default function DoctorServices() {
       const result = await DoctorsServices.getDoctorById(id);
       setDoctor(result)
     } catch (error: any) {
-      console.log("erro ao carregar dados do doctor: ", error.response.message);
+      console.log("erro ao carregar dados do doctor: ", error.message);
     }
   }
 

@@ -8,7 +8,7 @@ import { SpecialitysServices } from "@/src/services/specialitys/SpecialitysServi
 import { ISpecilitySaved } from "@/src/services/specialitys/types";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { Colors } from "@/src/styles/colors";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { BellSimpleIcon } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { FlatList, Image, RefreshControl, ScrollView, StatusBar, Text, View } from "react-native";
@@ -42,7 +42,9 @@ export default function Home() {
             setDoctors(listDoctors);
             setSpecialities(listSpecialities)
         } catch (error: any) {
-            console.log("Erro Home: ", error.response.message);
+            if (error.message == "Token inválido!") {
+                router.replace("/auth/signIn")
+            }
         } finally {
             setRefreshing(false)
         }

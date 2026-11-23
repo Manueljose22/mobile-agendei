@@ -47,7 +47,7 @@ export default function SignIn() {
             setUser(result)
             router.replace("/(dashboard)/home");
         } catch (error: any) {
-            console.log(`Erro ao registrar-se: ${error.data.response.message}`)
+            console.log(`Erro ao registrar-se: ${error.message}`)
         } finally {
             setLoading(false)
         }

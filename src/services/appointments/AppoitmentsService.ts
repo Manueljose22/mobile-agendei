@@ -28,7 +28,7 @@ export const AppointmentServices = {
 
     async Reschedule(idAppointment: string, data:{bookingDate: Date, bookingHour: string}): Promise<void> {
         try {
-            await Api.put(`/appointments/${idAppointment}`, data);
+            await Api.patch(`/appointments/${idAppointment}`, data);
 
         } catch (error: any) {
             throw new Error(error.response.data.message);
@@ -36,7 +36,7 @@ export const AppointmentServices = {
     },
     async Cancel(id: string): Promise<void> {
         try {
-            await Api.put(`/appointments/cancel/${id}`);
+            await Api.patch(`/appointments/cancel/${id}`);
 
         } catch (error: any) {
             throw new Error(error.response.data.message);

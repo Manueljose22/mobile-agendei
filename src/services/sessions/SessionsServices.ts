@@ -9,7 +9,7 @@ const login = async (payload: Pick<IRequestPayload, 'email' | 'password'>): Prom
 
     try {
         const { data } = await Api.post('/session/login', payload);
-        
+        console.log(data);
         return {
             id: data.user.id,
             name: data.user.name,
