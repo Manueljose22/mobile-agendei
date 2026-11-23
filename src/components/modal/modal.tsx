@@ -1,12 +1,3 @@
-
-
-type Props = {
-    
-}
-
-
 export const ModalDefault = () => {
-    return (
-        <></>
-    )   
-}
+  return null;
+};
