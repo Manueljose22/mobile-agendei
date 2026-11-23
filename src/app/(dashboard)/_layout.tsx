@@ -1,11 +1,27 @@
-import { Tabs } from "expo-router";
+import { Tabs, Redirect } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
 import {
   BookBookmarkIcon,
   HouseIcon,
   UserIcon,
 } from "phosphor-react-native";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
-export default function RootLayout() {
+export default function DashboardLayout() {
+  const { user, hasHydrated } = useAuthStore();
+
+  if (!hasHydrated) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" color="#0D6EFD" />
+      </View>
+    );
+  }
+
+  if (!user?.token) {
+    return <Redirect href="/auth/signIn" />;
+  }
+
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
