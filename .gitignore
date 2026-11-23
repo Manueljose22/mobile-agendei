@@ -31,8 +31,15 @@ yarn-error.*
 *.pem
 
 # local env files
+<<<<<<< HEAD
 .env*.local
 .env
+=======
+.env
+.env.*
+!.env.example
+
+>>>>>>> db6a6c8a02bcc253aadc0341f5a29a5f8c02039f
 # typescript
 *.tsbuildinfo
 
