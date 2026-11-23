@@ -1,4 +1,4 @@
-import axios from "axios";
+import { isAxiosError } from "axios";
 import { Api } from "../../utils/Api";
 import { IPayloadSave, IRequestPayload } from "../sessions/types";
 import { IUserProfile } from "./types";
@@ -15,7 +15,7 @@ export const PatientsServices = {
         token: data.token,
       };
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         const message = error.response?.data?.message;
         throw new Error(
           typeof message === "string"
@@ -35,7 +35,7 @@ export const PatientsServices = {
       const { data } = await Api.get<IUserProfile>("/patients/profile");
       return data;
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         const message = error.response?.data?.message;
         throw new Error(
           typeof message === "string"
@@ -51,7 +51,7 @@ export const PatientsServices = {
     try {
       await Api.put<IUserProfile>("/patients/:id", data);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         const message = error.response?.data?.message;
         throw new Error(
           typeof message === "string" ? message : "Não foi possível actualizar o perfil."
@@ -65,7 +65,7 @@ export const PatientsServices = {
     try {
       await Api.delete(`/patients/${id}`);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         const message = error.response?.data?.message;
         throw new Error(
           typeof message === "string" ? message : "Não foi possível eliminar a conta."
