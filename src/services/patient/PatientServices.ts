@@ -1,70 +1,77 @@
-import { Alert } from 'react-native';
-import { Api } from '../../utils/Api';
-import { IPayloadSave, IRequestPayload } from '../sessions/types';
-import { IUserProfile } from './types';
-
-
-
-
-
-
+import axios from "axios";
+import { Api } from "../../utils/Api";
+import { IPayloadSave, IRequestPayload } from "../sessions/types";
+import { IUserProfile } from "./types";
 
 export const PatientsServices = {
-    
-    async Register(payload: IRequestPayload): Promise<IPayloadSave> {
+  async Register(payload: IRequestPayload): Promise<IPayloadSave> {
+    try {
+      const { data } = await Api.post("/patients/", payload);
 
-        try {
-            const { data } = await Api.post("/patients/", payload);
-            
-            return {
-                id: data.user,
-                email: data.user.email,
-                name: data.user.name,
-                token: data.token
-            }
+      return {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+        token: data.token,
+      };
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message;
+        throw new Error(
+          typeof message === "string"
+            ? message
+            : "Não foi possível ligar ao servidor. Verifique a sua ligação."
+        );
+      }
 
-        } catch (error: any) {
-            Alert.alert("Erro", error.response.data.message)
-            throw new Error(error.response.data.message);
-        }
-    },
-
-
-    async Profile(): Promise<IUserProfile> {
-
-        try {
-            const { data } = await Api.get<IUserProfile>("/patients/profile");
-            return data
-        } catch (error: any) {
-            Alert.alert("Erro", error.response.data.message)
-            throw new Error(error.response.data.message);
-        }
-
-    },
-
-    async updateProfile(data: IUserProfile): Promise<void> {
-
-        try {
-            await Api.put<IUserProfile>("/patients/:id", data);
-
-        } catch (error: any) {
-            Alert.alert("Erro", error.response.data.message)
-            throw new Error(error.response.data.message);
-        }
-
-    },
-
-    async DeleteAccount(id: string): Promise<void> {
-        try {
-            await Api.delete("/patients/:id");
-            
-        } catch (error: any) {
-            Alert.alert("Erro", error.response.data.message)
-            throw new Error(error.response.data.message);
-        }
-
+      throw error instanceof Error
+        ? error
+        : new Error("Ocorreu um erro inesperado ao criar a conta.");
     }
-}
+  },
 
+  async Profile(): Promise<IUserProfile> {
+    try {
+      const { data } = await Api.get<IUserProfile>("/patients/profile");
+      return data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message;
+        throw new Error(
+          typeof message === "string"
+            ? message
+            : "Não foi possível carregar o perfil."
+        );
+      }
+      throw error instanceof Error ? error : new Error("Erro ao carregar o perfil.");
+    }
+  },
 
+  async updateProfile(data: IUserProfile): Promise<void> {
+    try {
+      await Api.put<IUserProfile>("/patients/:id", data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message;
+        throw new Error(
+          typeof message === "string" ? message : "Não foi possível actualizar o perfil."
+        );
+      }
+      throw error instanceof Error ? error : new Error("Erro ao actualizar o perfil.");
+    }
+  },
 
+  async DeleteAccount(id: string): Promise<void> {
+    try {
+      await Api.delete(`/patients/${id}`);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message;
+        throw new Error(
+          typeof message === "string" ? message : "Não foi possível eliminar a conta."
+        );
+      }
+      throw error instanceof Error ? error : new Error("Erro ao eliminar a conta.");
+    }
+  },
+};
