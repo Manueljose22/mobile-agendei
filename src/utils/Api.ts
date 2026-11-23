@@ -1,5 +1,5 @@
-import axios from 'axios';
-import * as SecureStore from 'expo-secure-store';
+import axios, { isAxiosError } from 'axios';
+import { useAuthStore } from '../store/useAuthStore';
 
 const API_URL =
   process.env.EXPO_PUBLIC_API_URL?.trim() || 'https://api.agendei.ao';
@@ -8,23 +8,27 @@ export const Api = axios.create({
   baseURL: API_URL,
 });
 
-Api.interceptors.request.use(async (config) => {
-  try {
-    const auth = await SecureStore.getItemAsync('auth');
+Api.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().user?.token;
 
-    if (!auth) {
-      return config;
-    }
-
-    const token = JSON.parse(auth)?.state?.user?.token;
-
-    if (typeof token === 'string' && token.trim()) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  } catch {
-    // A requisição continua sem autenticação; a API poderá responder com 401.
-    console.warn('Não foi possível recuperar a sessão armazenada.');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
   return config;
 });
+
+Api.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    if (
+      isAxiosError(error) &&
+      error.response?.status === 401 &&
+      error.config?.headers?.Authorization
+    ) {
+      useAuthStore.getState().logout();
+    }
+
+    return Promise.reject(error);
+  }
+);
