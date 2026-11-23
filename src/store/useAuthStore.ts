@@ -21,20 +21,27 @@ type User = {
 
 type AuthState = {
   user: User | null;
+  hasHydrated: boolean;
   setUser: (user: User) => void;
   logout: () => void;
+  setHasHydrated: (value: boolean) => void;
 };
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      hasHydrated: false,
       setUser: (user) => set({ user }),
       logout: () => set({ user: null }),
+      setHasHydrated: (hasHydrated) => set({ hasHydrated }),
     }),
     {
       name: "auth",
       storage: createJSONStorage(() => secureStore),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );
