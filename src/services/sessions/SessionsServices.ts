@@ -1,4 +1,4 @@
-import axios from "axios";
+import { isAxiosError } from "axios";
 import { Api } from "../../utils/Api";
 import { IPayloadSave, IRequestPayload } from "./types";
 
@@ -15,7 +15,7 @@ const login = async (
       token: data.token,
     };
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       const message = error.response?.data?.message;
       throw new Error(
         typeof message === "string"
