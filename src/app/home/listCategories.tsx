@@ -7,55 +7,68 @@ import { useEffect, useState } from "react";
 import { FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-
-
 export default function ListCategories() {
-    const [specialities, setSpecialities] = useState<ISpecilitySaved[]>();
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
-    const [isRefreshing, setRefreshing] = useState<boolean>(false);
+  const [specialities, setSpecialities] = useState<ISpecilitySaved[]>([]);
+  const [isRefreshing, setRefreshing] = useState(false);
 
+  const loading = async () => {
+    setRefreshing(true);
 
+    try {
+      const result = await SpecialitysServices.getAll();
+      setSpecialities(result);
+    } catch (error: any) {
+      console.log(
+        "Erro ao carregar especialidades:",
+        error?.message ?? "Erro desconhecido"
+      );
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
-    const loading =
-        async () => {
-            setRefreshing(true);
-            try {
-                const result = await SpecialitysServices.getAll();
-                setSpecialities(result);
-            } catch (error: any) {
-                console.log("Erro ao carregar especialidades: ", error.response.message);
+  useEffect(() => {
+    let active = true;
 
-            } finally {
-                setRefreshing(false)
-            }
+    SpecialitysServices.getAll()
+      .then((result) => {
+        if (active) {
+          setSpecialities(result);
         }
+      })
+      .catch((error: any) => {
+        console.log(
+          "Erro ao carregar especialidades:",
+          error?.message ?? "Erro desconhecido"
+        );
+      });
 
-    useEffect(() => {
-        loading()
-    }, [])
+    return () => {
+      active = false;
+    };
+  }, []);
 
-    return (
-        <SafeAreaView className="flex-1 bg-white py-5 px-5">
-            <FlatList
-                refreshControl={<RefreshControl
-                    refreshing={isRefreshing}
-                    onRefresh={loading}
-                    tintColor={Colors.blue[300]}
-                    colors={[Colors.blue[300]]}
-                />}
-                data={specialities}
-                numColumns={3}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <Category
-                        icon={specialtyIcons[item.name]}
-                        name={item.name}
-                        setSelectedOption={setSelectedOption}
-                    />
-                )}
-
-            />
-        </SafeAreaView>
-    );
+  return (
+    <SafeAreaView className="flex-1 bg-white py-5 px-5">
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={loading}
+            tintColor={Colors.blue[300]}
+            colors={[Colors.blue[300]]}
+          />
+        }
+        data={specialities}
+        numColumns={3}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <Category
+            icon={specialtyIcons[item.name]}
+            name={item.name}
+          />
+        )}
+      />
+    </SafeAreaView>
+  );
 }
