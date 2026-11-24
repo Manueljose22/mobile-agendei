@@ -52,7 +52,11 @@ export const PatientsServices = {
     data: (Omit<Partial<IUserProfile>, "dateBirth"> & { dateBirth?: string | Date }) | FormData
   ): Promise<void> {
     try {
-      await Api.patch(`/patients/${id}`, data);
+      await Api.patch(`/patients/${id}`, data, {
+        headers: {
+          "Content-Type": data instanceof FormData ? "multipart/form-data" : "application/json",
+        },
+      });
       
     } catch (error: unknown) {
       if (isAxiosError(error)) {
