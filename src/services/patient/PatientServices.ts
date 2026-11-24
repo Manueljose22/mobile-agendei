@@ -52,11 +52,19 @@ export const PatientsServices = {
       await Api.get("/patients/profile");
       return true;
     } catch (error: unknown) {
-      if (
-        isAxiosError(error) &&
-        [401, 403, 404].includes(error.response?.status ?? 0)
-      ) {
-        return false;
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message;
+
+        if (status === 401 || status === 403) {
+          return false;
+        }
+
+        // Um 404 só invalida a sessão quando o backend confirma que o paciente
+        // autenticado já não existe. Outros 404 podem indicar rota/API mal configurada.
+        if (status === 404 && message === "Paciente não encontrado.") {
+          return false;
+        }
       }
 
       throw error;
