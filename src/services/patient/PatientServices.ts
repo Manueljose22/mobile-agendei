@@ -52,12 +52,22 @@ export const PatientsServices = {
       await Api.patch(`/patients/${id}`, data);
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        const message = error.response?.data?.message;
-        throw new Error(
-          typeof message === "string" ? message : "Não foi possível actualizar o perfil."
-        );
+        const responseMessage = error.response?.data?.message;
+        const message = typeof responseMessage === "string"
+          ? responseMessage
+          : error.response
+            ? "O servidor recusou a actualização."
+            : "Não foi possível obter resposta do servidor. Verifique a ligação e o endereço da API.";
+        const status = error.response?.status;
+        const code = error.code;
+
+        throw new Error([
+          message,
+          status ? `HTTP ${status}` : null,
+          !status && code ? `Código: ${code}` : null,
+        ].filter(Boolean).join(" — "));
       }
-      throw error instanceof Error ? error : new Error("Erro ao actualizar o perfil.");
+      throw error instanceof Error ? error : new Error("Erro inesperado ao actualizar o perfil.");
     }
   },
 
