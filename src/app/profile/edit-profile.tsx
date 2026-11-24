@@ -5,6 +5,7 @@ import { useAuthStore } from "@/src/store/useAuthStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ActivityIndicator, Alert, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
@@ -142,12 +143,18 @@ export default function EditProfile() {
         } as unknown as Blob);
 
         await PatientsServices.updateProfile(user.id, payload);
+        
       } else {
         await PatientsServices.updateProfile(user.id, profileData);
       }
 
       setUser({ ...user, name: values.name.trim() });
-      Alert.alert("Perfil actualizado", "Os seus dados foram guardados com sucesso.");
+      Alert.alert("Perfil actualizado", "Os seus dados foram guardados com sucesso.", [
+        {
+          text: "OK",
+          onPress: () => { router.back();},
+        },
+      ]);
     } catch (error) {
       Alert.alert(
         "Erro ao actualizar",
