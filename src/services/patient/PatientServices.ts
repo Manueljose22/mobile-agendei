@@ -47,7 +47,7 @@ export const PatientsServices = {
     }
   },
 
-  async updateProfile(id: string, data: Partial<IUserProfile>): Promise<void> {
+  async updateProfile(id: string, data: Partial<IUserProfile> | FormData): Promise<void> {
     try {
       await Api.put(`/patients/${id}`, data);
     } catch (error: unknown) {
