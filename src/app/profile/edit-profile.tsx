@@ -110,28 +110,44 @@ export default function EditProfile() {
 
     setIsSaving(true);
     try {
-      const payload = new FormData();
-      payload.append("name", values.name.trim());
-      payload.append("phone", values.phone.trim());
-      payload.append("dateBirth", values.dateBirth.trim());
-      payload.append("address", values.address.trim());
-      payload.append("gender", values.gender);
+      const profileData = {
+        name: values.name.trim(),
+        phone: values.phone.trim(),
+        dateBirth: values.dateBirth.trim(),
+        address: values.address.trim(),
+        gender: values.gender,
+      };
 
-      if (image && !image.startsWith("http")) {
+      const hasNewPhoto = Boolean(image && !image.startsWith("http"));
+
+      if (hasNewPhoto && image) {
+        const payload = new FormData();
+        Object.entries(profileData).forEach(([key, value]) => {
+          payload.append(key, value);
+        });
+
         const filename = image.split("/").pop() || "profile.jpg";
         const extension = filename.split(".").pop()?.toLowerCase();
-        const type = extension === "png" ? "image/png" : "image/jpeg";
-        payload.append(
-          "photo",
-          { uri: image, name: filename, type } as unknown as Blob
-        );
-      }
+        const type =
+          extension === "png"
+            ? "image/png"
+            : extension === "webp"
+              ? "image/webp"
+              : "image/jpeg";
 
-      await PatientsServices.updateProfile(user.id, payload);
+        payload.append("photo", {
+          uri: image,
+          name: filename,
+          type,
+        } as unknown as Blob);
+
+        await PatientsServices.updateProfile(user.id, payload);
+      } else {
+        await PatientsServices.updateProfile(user.id, profileData);
+      }
 
       setUser({ ...user, name: values.name.trim() });
       Alert.alert("Perfil actualizado", "Os seus dados foram guardados com sucesso.");
-
     } catch (error) {
       Alert.alert(
         "Erro ao actualizar",
