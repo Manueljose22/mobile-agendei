@@ -53,6 +53,7 @@ export const PatientsServices = {
   ): Promise<void> {
     try {
       await Api.patch(`/patients/${id}`, data);
+      
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         const responseMessage = error.response?.data?.message;

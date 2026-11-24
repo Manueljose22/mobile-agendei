@@ -101,7 +101,7 @@ export default function Home() {
         />
       }
     >
-      <StatusBar />
+      <StatusBar barStyle="dark-content" />
       <View className="flex flex-row justify-between items-center mt-5">
         <Image
           className="w-2/4 h-10"

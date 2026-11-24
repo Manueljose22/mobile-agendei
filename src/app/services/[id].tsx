@@ -3,7 +3,7 @@ import { DoctorsServices } from "@/src/services/doctors/DoctorsServices";
 import { IDoctorsSave, IDoctorsService } from "@/src/services/doctors/types";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 
 export default function Services() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -47,6 +47,7 @@ export default function Services() {
       className="flex-1 bg-white py-5 px-6"
       showsVerticalScrollIndicator={false}
     >
+      <StatusBar barStyle="dark-content" />
       <DoctorAvatar
         id={doctor?.id}
         name={doctor?.name}

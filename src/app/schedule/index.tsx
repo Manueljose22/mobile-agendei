@@ -6,7 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import { router, useLocalSearchParams } from "expo-router";
 import { CheckCircleIcon } from 'phosphor-react-native';
 import { useState } from "react";
-import { Alert, Modal, Pressable, Text, View } from "react-native";
+import { Alert, Modal, Pressable, StatusBar, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -86,6 +86,7 @@ export default function Schedule() {
 
     return (
         <SafeAreaView className="flex-1 bg-white p-6 flex flex-col justify-between">
+            <StatusBar barStyle="dark-content" />
             <Calendar
                 minDate={new Date().toISOString().split('T')[0]}
                 onDayPress={(day) => { setSeletedDate(day.dateString) }}

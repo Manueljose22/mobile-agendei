@@ -7,7 +7,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { z } from "zod";
 
@@ -110,41 +110,28 @@ export default function EditProfile() {
 
     setIsSaving(true);
     try {
-      const profileData = {
-        name: values.name.trim(),
-        phone: values.phone.trim(),
-        dateBirth: values.dateBirth.trim(),
-        address: values.address.trim(),
-        gender: values.gender,
-      };
+      const payload = new FormData();
+      payload.append("name", values.name.trim());
+      payload.append("phone", values.phone.trim());
+      payload.append("dateBirth", values.dateBirth.trim());
+      payload.append("address", values.address.trim());
+      payload.append("gender", values.gender);
 
-      const hasNewPhoto = Boolean(image && !image.startsWith("http"));
-
-      if (hasNewPhoto && image) {
-        const payload = new FormData();
-        Object.entries(profileData).forEach(([key, value]) => {
-          payload.append(key, value);
-        });
-
+      if (image && !image.startsWith("http")) {
         const filename = image.split("/").pop() || "profile.jpg";
         const extension = filename.split(".").pop()?.toLowerCase();
-        const type = extension === "png"
-          ? "image/png"
-          : extension === "webp"
-            ? "image/webp"
-            : "image/jpeg";
-
+        const type = extension === "png" ? "image/png" : "image/jpeg";
         payload.append(
           "photo",
           { uri: image, name: filename, type } as unknown as Blob
         );
-
-        await PatientsServices.updateProfile(user.id, payload);
-      } else {
-        await PatientsServices.updateProfile(user.id, profileData);
       }
+
+      await PatientsServices.updateProfile(user.id, payload);
+
       setUser({ ...user, name: values.name.trim() });
       Alert.alert("Perfil actualizado", "Os seus dados foram guardados com sucesso.");
+
     } catch (error) {
       Alert.alert(
         "Erro ao actualizar",
@@ -157,9 +144,8 @@ export default function EditProfile() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+       <StatusBar barStyle="default" />
       <ScrollView className="flex-1 px-5" keyboardShouldPersistTaps="handled">
-        <Text className="mb-5 text-2xl font-semibold">Editar perfil</Text>
-
         <UserAvatar
           image={image}
           username={user?.name}

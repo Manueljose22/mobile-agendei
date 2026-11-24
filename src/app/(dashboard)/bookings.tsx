@@ -73,6 +73,7 @@ export default function Bookings() {
 
   return (
     <ScrollView
+    
       className="flex-1 p-5 bg-white/40"
       refreshControl={
         <RefreshControl

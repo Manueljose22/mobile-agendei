@@ -6,7 +6,7 @@ import { Colors } from "@/src/styles/colors";
 import { useFocusEffect } from "expo-router";
 import { BellIcon, InfoIcon, SignOutIcon, UserIcon } from "phosphor-react-native";
 import { useCallback, useState } from "react";
-import { Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Profile() {
@@ -38,6 +38,7 @@ export default function Profile() {
 
     return (
         <SafeAreaView className="flex-1 bg-white p-5">
+            <StatusBar barStyle="dark-content" />
             <View className="flex-row items-center mb-5">
                 <Text className="text-3xl font-medium">Perfil</Text>
             </View>

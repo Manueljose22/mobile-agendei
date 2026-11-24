@@ -4,7 +4,7 @@ import { SpecialitysServices } from "@/src/services/specialitys/SpecialitysServi
 import { ISpecilitySaved } from "@/src/services/specialitys/types";
 import { Colors } from "@/src/styles/colors";
 import { useEffect, useState } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList, RefreshControl, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ListCategories() {
@@ -50,6 +50,7 @@ export default function ListCategories() {
 
   return (
     <SafeAreaView className="flex-1 bg-white py-5 px-5">
+      <StatusBar barStyle="dark-content" />
       <FlatList
         refreshControl={
           <RefreshControl
