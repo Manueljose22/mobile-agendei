@@ -143,9 +143,9 @@ export default function EditProfile() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-       <StatusBar barStyle="default" />
-      <ScrollView className="flex-1 px-5" keyboardShouldPersistTaps="handled">
+    <ScrollView className="flex-1 " keyboardShouldPersistTaps="handled">
+      <SafeAreaView className="px-5 bg-white">
+        <StatusBar barStyle="dark-content" />
         <UserAvatar
           image={image}
           username={user?.name}
@@ -219,7 +219,7 @@ export default function EditProfile() {
             </Pressable>
           </View>
         )}
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
