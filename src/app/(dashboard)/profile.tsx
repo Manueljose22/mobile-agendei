@@ -3,15 +3,20 @@ import { InfoContent } from "@/src/components/infoContent/InfoContent";
 import { PatientsServices } from "@/src/services/patient/PatientServices";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { Colors } from "@/src/styles/colors";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { BellIcon, InfoIcon, SignOutIcon, UserIcon } from "phosphor-react-native";
 import { useCallback, useState } from "react";
-import { StatusBar, Text, View } from "react-native";
+import { Pressable, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Profile() {
     const { logout, user } = useAuthStore();
     const [photo, setPhoto] = useState<string | null>(null);
+
+    const handleLogout = () => {
+        logout();
+        router.replace("/auth/signIn");
+    };
 
     useFocusEffect(
         useCallback(() => {
@@ -68,13 +73,17 @@ export default function Profile() {
                     linkText="Sobre"
                     linkUrl={{ pathname: "/dashboard/about" }}
                 />
-                <InfoContent
-                    color="danger"
-                    icon={<SignOutIcon size={25} color={Colors.gray[200]} weight="fill" />}
-                    linkText="Terminar"
-                    onPress={logout}
-                    linkUrl={{ pathname: "/auth/signIn" }}
-                />
+                <Pressable
+                    onPress={handleLogout}
+                    className="flex-row items-center gap-3 border-b border-gray-200 py-5"
+                    accessibilityRole="button"
+                    accessibilityLabel="Terminar sessão"
+                >
+                    <SignOutIcon size={25} color={Colors.gray[200]} weight="fill" />
+                    <Text className="ms-2 text-base font-medium text-red-600">
+                        Terminar
+                    </Text>
+                </Pressable>
             </View>
         </SafeAreaView>
     );
