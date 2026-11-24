@@ -207,7 +207,7 @@ export default function EditProfile() {
 
             <Pressable
               disabled={isSaving}
-              onPress={handleSubmit(onSubmit)}
+              onPress={() => { void handleSubmit(onSubmit)(); }}
               className={`mb-8 items-center rounded-lg py-4 ${isSaving ? "bg-blue-300" : "bg-blue-600"}`}
             >
               {isSaving ? (
