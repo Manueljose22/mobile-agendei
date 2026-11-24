@@ -1,9 +1,52 @@
 import '@/src/styles/global.css';
+import { useEffect, useRef, useState } from "react";
 import { Stack } from 'expo-router';
-
-
+import { ActivityIndicator, View } from "react-native";
+import { PatientsServices } from "@/src/services/patient/PatientServices";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 export default function RootLayout() {
+  const { user, hasHydrated, logout } = useAuthStore();
+  const [isSessionReady, setIsSessionReady] = useState(false);
+  const hasCheckedInitialSession = useRef(false);
+
+  useEffect(() => {
+    if (!hasHydrated || hasCheckedInitialSession.current) {
+      return;
+    }
+
+    hasCheckedInitialSession.current = true;
+
+    const validateSession = async () => {
+      if (!user?.token) {
+        setIsSessionReady(true);
+        return;
+      }
+
+      try {
+        const isValid = await PatientsServices.ValidateSession();
+
+        if (!isValid) {
+          logout();
+        }
+      } catch {
+        // Falhas de rede ou do servidor não devem apagar uma sessão potencialmente válida.
+      } finally {
+        setIsSessionReady(true);
+      }
+    };
+
+    void validateSession();
+  }, [hasHydrated, user?.token, logout]);
+
+  if (!hasHydrated || !isSessionReady) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" color="#0D6EFD" />
+      </View>
+    );
+  }
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
@@ -48,8 +91,6 @@ export default function RootLayout() {
         headerTintColor: "#212121",
         headerTitleAlign: 'center',
         headerShadowVisible: false
-
-
       }}
       />
 
@@ -62,5 +103,5 @@ export default function RootLayout() {
       }}
       />
     </Stack>
-  )
+  );
 }
