@@ -47,6 +47,22 @@ export const PatientsServices = {
     }
   },
 
+  async ValidateSession(): Promise<boolean> {
+    try {
+      await Api.get("/patients/profile");
+      return true;
+    } catch (error: unknown) {
+      if (
+        isAxiosError(error) &&
+        [401, 403, 404].includes(error.response?.status ?? 0)
+      ) {
+        return false;
+      }
+
+      throw error;
+    }
+  },
+
   async updateProfile(
     id: string,
     data: (Omit<Partial<IUserProfile>, "dateBirth"> & { dateBirth?: string | Date }) | FormData
