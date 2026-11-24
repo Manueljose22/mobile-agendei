@@ -18,7 +18,7 @@ export default function UserAvatar({email, image, username, onPress}:avatarProps
             <View>
                 <Image
                     className="w-[120px] h-[120px] rounded-full border-2 border-gray-500"
-                    source={{ uri: image ?? "https://avatars.githubusercontent.com/u/102646626?v=5" }}
+                    source={{ uri: image || "https://cdn-icons-png.flaticon.com/512/149/149071.png" }}
                 />
                 <Pressable onPress={onPress} style={{ elevation: 2 }} className="absolute bottom-2 right-2 bg-gray-500 p-2 rounded-full z-10">
                     <PenIcon
