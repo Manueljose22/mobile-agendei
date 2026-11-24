@@ -47,7 +47,10 @@ export const PatientsServices = {
     }
   },
 
-  async updateProfile(id: string, data: Partial<IUserProfile> | FormData): Promise<void> {
+  async updateProfile(
+    id: string,
+    data: (Omit<Partial<IUserProfile>, "dateBirth"> & { dateBirth?: string | Date }) | FormData
+  ): Promise<void> {
     try {
       await Api.patch(`/patients/${id}`, data);
     } catch (error: unknown) {
