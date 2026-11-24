@@ -49,7 +49,7 @@ export const PatientsServices = {
 
   async updateProfile(id: string, data: Partial<IUserProfile> | FormData): Promise<void> {
     try {
-      await Api.put(`/patients/${id}`, data);
+      await Api.patch(`/patients/${id}`, data);
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         const message = error.response?.data?.message;
