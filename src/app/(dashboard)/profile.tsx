@@ -4,18 +4,56 @@ import { PatientsServices } from "@/src/services/patient/PatientServices";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { Colors } from "@/src/styles/colors";
 import { router, useFocusEffect } from "expo-router";
-import { BellIcon, InfoIcon, SignOutIcon, UserIcon } from "phosphor-react-native";
+import { BellIcon, InfoIcon, SignOutIcon, TrashIcon, UserIcon } from "phosphor-react-native";
 import { useCallback, useState } from "react";
-import { Pressable, StatusBar, Text, View } from "react-native";
+import { Alert, Pressable, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Profile() {
     const { logout, user } = useAuthStore();
     const [photo, setPhoto] = useState<string | null>(null);
+    const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
     const handleLogout = () => {
         logout();
         router.replace("/auth/signIn");
+    };
+
+    const confirmDeleteAccount = async () => {
+        if (!user?.id || isDeletingAccount) return;
+
+        setIsDeletingAccount(true);
+        try {
+            await PatientsServices.DeleteAccount(user.id);
+            logout();
+            router.replace("/auth/signIn");
+        } catch (error: unknown) {
+            Alert.alert(
+                "Não foi possível eliminar a conta",
+                error instanceof Error
+                    ? error.message
+                    : "Ocorreu um erro inesperado. Tente novamente."
+            );
+        } finally {
+            setIsDeletingAccount(false);
+        }
+    };
+
+    const handleDeleteAccount = () => {
+        if (!user?.id || isDeletingAccount) return;
+
+        Alert.alert(
+            "Eliminar conta",
+            "Esta operação é irreversível. Os seus dados pessoais serão anonimizados e deixará de poder aceder à conta. O histórico de consultas será preservado. Deseja continuar?",
+            [
+                { text: "Cancelar", style: "cancel" },
+                {
+                    text: "Eliminar conta",
+                    style: "destructive",
+                    onPress: () => void confirmDeleteAccount(),
+                },
+            ]
+        );
     };
 
     useFocusEffect(
@@ -82,6 +120,19 @@ export default function Profile() {
                     <SignOutIcon size={25} color={Colors.gray[200]} weight="fill" />
                     <Text className="ms-2 text-base font-medium text-red-600">
                         Terminar
+                    </Text>
+                </Pressable>
+                <Pressable
+                    onPress={handleDeleteAccount}
+                    disabled={isDeletingAccount}
+                    className="flex-row items-center gap-3 border-b border-gray-200 py-5"
+                    accessibilityRole="button"
+                    accessibilityLabel="Eliminar conta"
+                    accessibilityState={{ disabled: isDeletingAccount }}
+                >
+                    <TrashIcon size={25} color={Colors.gray[200]} weight="regular" />
+                    <Text className="ms-2 text-base font-medium text-red-700">
+                        {isDeletingAccount ? "A eliminar conta..." : "Eliminar conta"}
                     </Text>
                 </Pressable>
             </View>
