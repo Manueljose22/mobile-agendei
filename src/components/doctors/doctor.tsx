@@ -15,7 +15,7 @@ type doctorProps = {
 export default function Doctor({ id, name, photo, speciality }: doctorProps) {
     return (
 
-        <Link className='me-5 p-4 bg-gray-200 rounded-2xl mb-4'
+        <Link className='mr-8 p-4 bg-gray-200 rounded-2xl mb-4'
             href={{ pathname: "/doctor/[id]", params: { id:id } }}>
             <View className='flex flex-col items-center'>
                 <Image className='w-36 h-44 rounded-2xl' resizeMode='cover' source={{uri: photo ?? "https://cdn-icons-png.flaticon.com/512/6210/6210017.png" }} />

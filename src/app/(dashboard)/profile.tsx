@@ -130,7 +130,7 @@ export default function Profile() {
                     accessibilityLabel="Eliminar conta"
                     accessibilityState={{ disabled: isDeletingAccount }}
                 >
-                    <TrashIcon size={25} color={Colors.gray[200]} weight="regular" />
+                    <TrashIcon size={25} color={Colors.red[200]} weight="regular" />
                     <Text className="ms-2 text-base font-medium text-red-700">
                         {isDeletingAccount ? "A eliminar conta..." : "Eliminar conta"}
                     </Text>
