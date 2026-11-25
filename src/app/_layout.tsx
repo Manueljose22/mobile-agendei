@@ -59,6 +59,20 @@ function RootLayoutContent() {
           headerTitleAlign: 'center',
           headerShadowVisible: false
         }} />
+        <Stack.Screen name="home/listHospitals" options={{
+          headerShown: true,
+          title: "Hospitais",
+          headerTintColor: "#212121",
+          headerTitleAlign: 'center',
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]" options={{
+          headerShown: true,
+          title: "Detalhes do Hospital",
+          headerTintColor: "#212121",
+          headerTitleAlign: 'center',
+          headerShadowVisible: false
+        }} />
         <Stack.Screen name="doctor/[id]" options={{
           headerShown: true,
           title: "Detalhes do Médico",
