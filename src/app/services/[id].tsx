@@ -1,14 +1,36 @@
 import DoctorAvatar from "@/src/components/avatar/doctorAvatar";
-import { DoctorsServices } from "@/src/services/doctors/DoctorsServices";
-import { IDoctorsSave, IDoctorsService } from "@/src/services/doctors/types";
+import {
+  useDoctorQuery,
+  useDoctorServicesQuery,
+} from "@/src/hooks/queries/useDoctorsQuery";
 import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { FlatList, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { useEffect } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Services() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const [doctorServices, setDoctorServices] = useState<IDoctorsService[]>([]);
-  const [doctor, setDoctor] = useState<IDoctorsSave>();
+  const {
+    data: doctor,
+    isLoading: isDoctorLoading,
+    isError: isDoctorError,
+    error: doctorError,
+    refetch: refetchDoctor,
+  } = useDoctorQuery(id);
+  const {
+    data: doctorServices,
+    isLoading: areServicesLoading,
+    isError: areServicesError,
+    error: servicesError,
+    refetch: refetchServices,
+  } = useDoctorServicesQuery(id);
 
   const handleSchedule = (idService: string) => {
     router.navigate({
@@ -17,30 +39,49 @@ export default function Services() {
     });
   };
 
+  const isLoading = isDoctorLoading || areServicesLoading;
+  const hasError = isDoctorError || areServicesError;
+
   useEffect(() => {
-    let active = true;
+    if (isDoctorError) {
+      console.log("Erro ao carregar dados do médico:", doctorError);
+    }
+    if (areServicesError) {
+      console.log("Erro ao carregar serviços do médico:", servicesError);
+    }
+  }, [isDoctorError, areServicesError, doctorError, servicesError]);
 
-    Promise.all([
-      DoctorsServices.getDoctorById(id),
-      DoctorsServices.getDoctorService(id),
-    ])
-      .then(([doctorResult, servicesResult]) => {
-        if (active) {
-          setDoctor(doctorResult);
-          setDoctorServices(servicesResult);
-        }
-      })
-      .catch((error: any) => {
-        console.log(
-          "Erro ao carregar dados do médico:",
-          error?.message ?? "Erro desconhecido"
-        );
-      });
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="large" color="#3B82F6" />
+        <Text className="text-gray-500 mt-3">A carregar serviços...</Text>
+      </View>
+    );
+  }
 
-    return () => {
-      active = false;
-    };
-  }, [id]);
+  if (hasError || !doctor) {
+    const message = doctorError instanceof Error
+      ? doctorError.message
+      : servicesError instanceof Error
+        ? servicesError.message
+        : "Não foi possível carregar os dados.";
+
+    return (
+      <View className="flex-1 items-center justify-center bg-white px-6">
+        <Text className="text-gray-700 text-center mb-4">{message}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            refetchDoctor();
+            refetchServices();
+          }}
+          className="bg-blue-500 px-5 py-3 rounded-lg"
+        >
+          <Text className="text-white font-semibold">Tentar novamente</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -49,11 +90,11 @@ export default function Services() {
     >
       <StatusBar barStyle="dark-content" />
       <DoctorAvatar
-        id={doctor?.id}
-        name={doctor?.name}
-        speciality={doctor?.Specialty?.name}
-        location={doctor?.Hospital?.name}
-        photo={doctor?.photo}
+        id={doctor.id}
+        name={doctor.name}
+        speciality={doctor.Specialty?.name}
+        location={doctor.Hospital?.name}
+        photo={doctor.photo}
       />
 
       <View className="w-full h-[1px] bg-gray-300" />
@@ -69,7 +110,7 @@ export default function Services() {
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 50 }}
-            data={doctorServices}
+            data={doctorServices ?? []}
             keyExtractor={(item) => item.idService}
             renderItem={({ item }) => (
               <View className="flex-row justify-between items-center bg-gray-100 p-4 rounded-lg mb-3">
