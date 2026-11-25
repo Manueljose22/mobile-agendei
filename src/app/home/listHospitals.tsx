@@ -28,6 +28,10 @@ export default function ListHospitals() {
     );
   }, [hospitals, search]);
 
+  const handleRefresh = async (): Promise<void> => {
+    await hospitalsQuery.refetch();
+  };
+
   if (hospitalsQuery.isPending) {
     return (
       <View className="flex-1 items-center justify-center bg-slate-50">
@@ -61,7 +65,7 @@ export default function ListHospitals() {
       refreshControl={
         <RefreshControl
           refreshing={hospitalsQuery.isRefetching}
-          onRefresh={() => hospitalsQuery.refetch()}
+          onRefresh={handleRefresh}
           tintColor={Colors.blue[300]}
           colors={[Colors.blue[300]]}
         />
