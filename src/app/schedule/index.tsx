@@ -40,8 +40,8 @@ export default function Schedule() {
         periods.forEach(p => {
             if (dateKey(new Date(p.date)) !== seletedDate || p.isBlocked) return;
             const start = localMinutes(p.hourStart), end = localMinutes(p.hourEnd);
-            for (let m = start; m + 60 <= end; m += 60) {
-                const blocked = (data?.exceptions ?? []).some(e => dateKey(new Date(e.date)) === seletedDate && e.type === 'BLOCK_PERIOD' && e.startMinute != null && e.endMinute != null && m < e.endMinute && m + 60 > e.startMinute);
+            for (let m = start; m + 30 <= end; m += 30) {
+                const blocked = (data?.exceptions ?? []).some(e => dateKey(new Date(e.date)) === seletedDate && e.type === 'BLOCK_PERIOD' && e.startMinute != null && e.endMinute != null && m < e.endMinute && m + 30 > e.startMinute);
                 if (!blocked) slots.add(hourLabel(m));
             }
         });
