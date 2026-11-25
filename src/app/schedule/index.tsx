@@ -68,7 +68,7 @@ export default function Schedule() {
     return <SafeAreaView className="flex-1 bg-white p-6">
         <StatusBar barStyle="dark-content" />
         {isLoading ? <Text className="text-gray-600 py-4">A carregar disponibilidade...</Text> : null}
-        {isError ? <View className="py-3"><Text className="text-red-600 mb-2">Não foi possível carregar os horários.</Text><Button text="Tentar novamente" onPress={() => refetch()} /></View> : null}
+        {isError ? <View className="py-3"><Text className="text-red-600 mb-2">Não foi possível carregar os horários.</Text><Button loading={false} text="Tentar novamente" onPress={() => refetch()} /></View> : null}
         {!isLoading && !isError && availableDates.size === 0 ? <Text className="text-gray-600 py-4">Sem disponibilidade nos próximos 90 dias.</Text> : null}
         <Calendar minDate={today} maxDate={rangeEnd} onDayPress={day => { if (availableDates.has(day.dateString)) { setSeletedDate(day.dateString); setSeletedHour(''); } }} markedDates={markedDates}
             dayComponent={({ date, state }) => {
