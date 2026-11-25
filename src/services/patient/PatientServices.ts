@@ -103,6 +103,27 @@ export const PatientsServices = {
     }
   },
 
+  async ChangePassword(
+    id: string,
+    payload: { password: string; newPassword: string }
+  ): Promise<void> {
+    try {
+      await Api.patch(`/patients/changePassword/${id}`, payload);
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        const message = error.response?.data?.message;
+        throw new Error(
+          typeof message === "string"
+            ? message
+            : "Não foi possível alterar a palavra-passe."
+        );
+      }
+      throw error instanceof Error
+        ? error
+        : new Error("Erro ao alterar a palavra-passe.");
+    }
+  },
+
   async DeleteAccount(id: string): Promise<void> {
     try {
       await Api.delete(`/patients/${id}`);
