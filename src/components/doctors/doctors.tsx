@@ -39,11 +39,12 @@ export default function Doctors({ columns, horizontal }: DoctorsProps) {
       showsVerticalScrollIndicator={false}
       horizontal={horizontal}
       numColumns={columns}
+      columnWrapperStyle={columns ? { justifyContent: "space-between", gap: 16 } : undefined}
       data={doctors}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <Link
-          className="me-5 p-4 bg-gray-200 rounded-2xl mb-4"
+          className="p-4 bg-gray-200 rounded-2xl mb-4"
           href={{ pathname: "/doctor/[id]", params: { id: item.id } }}
         >
           <View className="flex flex-col items-center">
