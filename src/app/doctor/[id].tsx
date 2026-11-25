@@ -1,39 +1,42 @@
 import DoctorAvatar from "@/src/components/avatar/doctorAvatar";
 import { ButtonDefault } from "@/src/components/button/ButtonDefault";
 import { workingHours } from "@/src/constants/data";
-import { DoctorsServices } from "@/src/services/doctors/DoctorsServices";
-import { IDoctorsSave } from "@/src/services/doctors/types";
+import { useDoctorQuery } from "@/src/hooks/queries/useDoctorsQuery";
 import { Colors } from "@/src/styles/colors";
 import { useLocalSearchParams } from "expo-router";
 import { BagIcon, StarIcon, UsersIcon } from "phosphor-react-native";
-import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function DoctorServices() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [readMore, setReadMore] = useState(false);
-  const [doctor, setDoctor] = useState<IDoctorsSave>();
+  const { data: doctor, isLoading, isError, error, refetch } = useDoctorQuery(id);
 
-  useEffect(() => {
-    let active = true;
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="large" color={Colors.blue[300]} />
+        <Text className="text-gray-500 mt-3">A carregar dados do médico...</Text>
+      </View>
+    );
+  }
 
-    DoctorsServices.getDoctorById(id)
-      .then((result) => {
-        if (active) {
-          setDoctor(result);
-        }
-      })
-      .catch((error: any) => {
-        console.log(
-          "Erro ao carregar dados do médico:",
-          error?.message ?? "Erro desconhecido"
-        );
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [id]);
+  if (isError || !doctor) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white px-6">
+        <Text className="text-gray-700 text-center mb-4">
+          {error instanceof Error ? error.message : "Não foi possível carregar os dados do médico."}
+        </Text>
+        <TouchableOpacity
+          onPress={() => refetch()}
+          className="bg-blue-500 px-5 py-3 rounded-lg"
+        >
+          <Text className="text-white font-semibold">Tentar novamente</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -41,11 +44,11 @@ export default function DoctorServices() {
       showsVerticalScrollIndicator={false}
     >
       <DoctorAvatar
-        id={doctor?.id}
-        name={doctor?.name}
-        speciality={doctor?.Specialty?.name}
-        location={doctor?.Hospital?.name}
-        photo={doctor?.photo}
+        id={doctor.id}
+        name={doctor.name}
+        speciality={doctor.Specialty?.name}
+        location={doctor.Hospital?.name}
+        photo={doctor.photo}
       />
 
       <View className="w-full h-[1px] bg-gray-300" />
@@ -57,7 +60,7 @@ export default function DoctorServices() {
               <BagIcon weight="fill" color={Colors.blue[300]} size={25} />
             </View>
             <Text className="text-lg text-blue-500 font-medium">
-              {doctor?.yaersOfExperience}
+              {doctor.yaersOfExperience ?? 0}
             </Text>
             <Text className="text-gray-600 text-sm">Anos de Experiência</Text>
           </View>
@@ -67,7 +70,7 @@ export default function DoctorServices() {
               <UsersIcon weight="fill" color={Colors.blue[300]} size={25} />
             </View>
             <Text className="text-lg text-blue-500 font-medium">
-              +{doctor?.numberOfPatients}
+              +{doctor.numberOfPatients ?? 0}
             </Text>
             <Text className="text-gray-600 text-sm">Pacientes</Text>
           </View>
@@ -77,7 +80,7 @@ export default function DoctorServices() {
               <StarIcon weight="fill" color={Colors.blue[300]} size={25} />
             </View>
             <Text className="text-lg text-blue-500 font-medium">
-              +{doctor?.rating}
+              +{doctor.rating ?? 0}
             </Text>
             <Text className="text-gray-600 text-sm">Avaliações</Text>
           </View>
@@ -87,11 +90,13 @@ export default function DoctorServices() {
           <Text className="text-lg font-medium mb-2">Sobre</Text>
           <Text className="text-gray-600 text-base text-justify leading-relaxed">
             {readMore
-              ? doctor?.bio
-              : `${doctor?.bio?.slice(0, 350)}...`}
+              ? doctor.bio ?? "Informação não disponível."
+              : doctor.bio
+                ? `${doctor.bio.slice(0, 350)}${doctor.bio.length > 350 ? "..." : ""}`
+                : "Informação não disponível."}
           </Text>
 
-          {doctor?.bio?.length! > 350 && (
+          {(doctor.bio?.length ?? 0) > 350 && (
             <Text
               className="text-blue-500 mt-1"
               onPress={() => setReadMore(!readMore)}
