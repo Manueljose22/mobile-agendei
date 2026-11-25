@@ -12,13 +12,13 @@ import { Link } from "expo-router";
 import { BellSimpleIcon } from "phosphor-react-native";
 import { useState } from "react";
 import {
-  FlatList,
-  Image,
-  RefreshControl,
-  ScrollView,
-  StatusBar,
-  Text,
-  View,
+    FlatList,
+    Image,
+    RefreshControl,
+    ScrollView,
+    StatusBar,
+    Text,
+    View,
 } from "react-native";
 
 export default function Home() {
@@ -137,6 +137,7 @@ export default function Home() {
         <FlatList
           className="mb-6"
           horizontal
+          contentContainerStyle={{ gap: 16 }}
           showsHorizontalScrollIndicator={false}
           data={hospitals.slice(0, 5)}
           keyExtractor={(item) => item.id}
@@ -150,7 +151,7 @@ export default function Home() {
       )}
 
       <View className="mt-4 mb-5 flex flex-row justify-between items-center">
-        <Text className="text-3xl font-medium">Doutores</Text>
+        <Text className="text-3xl font-medium">Médicos</Text>
         <Link href="/home/listDoctors">
           <Text className="text-base text-gray-500 font-medium">
             Ver todos
@@ -168,6 +169,7 @@ export default function Home() {
         ) : (
           <FlatList
             horizontal
+            contentContainerStyle={{ gap: 16 }}
             showsHorizontalScrollIndicator={false}
             data={filteredDoctors}
             keyExtractor={(item) => item.id}

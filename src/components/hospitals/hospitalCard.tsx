@@ -19,10 +19,11 @@ export default function HospitalCard({
       className={`bg-white rounded-2xl border border-gray-100 overflow-hidden ${horizontal ? "w-64 mr-4" : "w-full mb-4"}`}
     >
       <Image
+        
         source={{
           uri: image ?? "https://cdn-icons-png.flaticon.com/512/2966/2966327.png",
         }}
-        className={horizontal ? "w-full h-36" : "w-full h-44"}
+        className={horizontal ? "w-full h-32 rounded-2xl" : "w-full h-44 rounded-2xl"}
         resizeMode="cover"
       />
       <View className="p-4">

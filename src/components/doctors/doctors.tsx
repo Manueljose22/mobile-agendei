@@ -34,6 +34,7 @@ export default function Doctors({ columns, horizontal }: DoctorsProps) {
 
   return (
     <FlatList
+      contentContainerStyle={{ gap: 16 }}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
       horizontal={horizontal}
