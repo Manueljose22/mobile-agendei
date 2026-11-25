@@ -20,7 +20,7 @@ export default function HospitalCard({
     >
       <Image
         source={{
-          uri: image ?? "https://cdn-icons-png.flaticon.com/512/ hospital-placeholder.png",
+          uri: image ?? "https://cdn-icons-png.flaticon.com/512/2966/2966327.png",
         }}
         className={horizontal ? "w-full h-36" : "w-full h-44"}
         resizeMode="cover"
