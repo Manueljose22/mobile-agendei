@@ -1,8 +1,10 @@
 import Category from "@/src/components/categories/category";
 import Doctor from "@/src/components/doctors/doctor";
+import HospitalCard from "@/src/components/hospitals/hospitalCard";
 import { SearchComponent } from "@/src/components/search/SearchComponent";
 import { specialtyIcons } from "@/src/constants/specialtyIcons";
 import { useDoctorsQuery } from "@/src/hooks/queries/useDoctorsQuery";
+import { useHospitalsQuery } from "@/src/hooks/queries/useHospitalsQuery";
 import { useSpecialitiesQuery } from "@/src/hooks/queries/useSpecialitiesQuery";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { Colors } from "@/src/styles/colors";
@@ -24,15 +26,18 @@ export default function Home() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const doctorsQuery = useDoctorsQuery();
   const specialitiesQuery = useSpecialitiesQuery();
+  const hospitalsQuery = useHospitalsQuery();
   const { user } = useAuthStore();
 
   const doctors = doctorsQuery.data ?? [];
   const specialities = specialitiesQuery.data ?? [];
+  const hospitals = hospitalsQuery.data ?? [];
 
   const refreshData = async () => {
     await Promise.all([
       doctorsQuery.refetch(),
       specialitiesQuery.refetch(),
+      hospitalsQuery.refetch(),
     ]);
   };
 
@@ -55,7 +60,11 @@ export default function Home() {
       className="flex-1 py-5 px-6 bg-slate-50"
       refreshControl={
         <RefreshControl
-          refreshing={doctorsQuery.isRefetching || specialitiesQuery.isRefetching}
+          refreshing={
+            doctorsQuery.isRefetching ||
+            specialitiesQuery.isRefetching ||
+            hospitalsQuery.isRefetching
+          }
           onRefresh={refreshData}
           tintColor={Colors.blue[300]}
           colors={[Colors.blue[300]]}
@@ -106,6 +115,37 @@ export default function Home() {
               setSelectedOption={setSelectedOption}
             />
           )}
+        />
+      )}
+
+      <View className="mt-4 mb-5 flex flex-row justify-between items-center">
+        <Text className="text-3xl font-medium">Hospitais</Text>
+        <Link href="/home/listHospitals">
+          <Text className="text-base text-gray-500 font-medium">
+            Ver todos
+          </Text>
+        </Link>
+      </View>
+
+      {hospitalsQuery.isPending ? (
+        <Text className="text-gray-500 mb-6">A carregar hospitais...</Text>
+      ) : hospitalsQuery.isError ? (
+        <Text className="text-red-500 mb-6">
+          Não foi possível carregar os hospitais.
+        </Text>
+      ) : (
+        <FlatList
+          className="mb-6"
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={hospitals.slice(0, 5)}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <HospitalCard hospital={item} horizontal />
+          )}
+          ListEmptyComponent={
+            <Text className="text-gray-500 mb-6">Nenhum hospital disponível.</Text>
+          }
         />
       )}
 
