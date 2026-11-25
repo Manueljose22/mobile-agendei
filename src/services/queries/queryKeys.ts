@@ -7,4 +7,8 @@ export const queryKeys = {
   specialities: {
     all: ["specialities"] as const,
   },
+  hospitals: {
+    all: ["hospitals"] as const,
+    detail: (id: string) => ["hospitals", id] as const,
+  },
 };
