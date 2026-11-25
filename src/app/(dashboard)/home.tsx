@@ -2,15 +2,13 @@ import Category from "@/src/components/categories/category";
 import Doctor from "@/src/components/doctors/doctor";
 import { SearchComponent } from "@/src/components/search/SearchComponent";
 import { specialtyIcons } from "@/src/constants/specialtyIcons";
-import { DoctorsServices } from "@/src/services/doctors/DoctorsServices";
-import { IDoctorsSave } from "@/src/services/doctors/types";
-import { SpecialitysServices } from "@/src/services/specialitys/SpecialitysServices";
-import { ISpecilitySaved } from "@/src/services/specialitys/types";
+import { useDoctorsQuery } from "@/src/hooks/queries/useDoctorsQuery";
+import { useSpecialitiesQuery } from "@/src/hooks/queries/useSpecialitiesQuery";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { Colors } from "@/src/styles/colors";
 import { Link } from "expo-router";
 import { BellSimpleIcon } from "phosphor-react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   FlatList,
   Image,
@@ -24,56 +22,19 @@ import {
 export default function Home() {
   const [search, setSearch] = useState<string | undefined>();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [isRefreshing, setRefreshing] = useState(false);
-  const [doctors, setDoctors] = useState<IDoctorsSave[]>([]);
-  const [specialities, setSpecialities] = useState<ISpecilitySaved[]>([]);
+  const doctorsQuery = useDoctorsQuery();
+  const specialitiesQuery = useSpecialitiesQuery();
   const { user } = useAuthStore();
 
-  const loading = async () => {
-    setRefreshing(true);
+  const doctors = doctorsQuery.data ?? [];
+  const specialities = specialitiesQuery.data ?? [];
 
-    try {
-      const [listDoctors, listSpecialities] = await Promise.all([
-        DoctorsServices.getAll(),
-        SpecialitysServices.getAll(),
-      ]);
-
-      setDoctors(listDoctors);
-      setSpecialities(listSpecialities);
-    } catch (error: any) {
-      console.log(
-        "Erro Home:",
-        error?.message ?? "Erro desconhecido"
-      );
-    } finally {
-      setRefreshing(false);
-    }
+  const refreshData = async () => {
+    await Promise.all([
+      doctorsQuery.refetch(),
+      specialitiesQuery.refetch(),
+    ]);
   };
-
-  useEffect(() => {
-    let active = true;
-
-    Promise.all([
-      DoctorsServices.getAll(),
-      SpecialitysServices.getAll(),
-    ])
-      .then(([listDoctors, listSpecialities]) => {
-        if (active) {
-          setDoctors(listDoctors);
-          setSpecialities(listSpecialities);
-        }
-      })
-      .catch((error: any) => {
-        console.log(
-          "Erro Home:",
-          error?.message ?? "Erro desconhecido"
-        );
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   const searchTerm = search?.trim().toLowerCase();
   const filteredDoctors = doctors.filter((doctor) => {
@@ -94,8 +55,8 @@ export default function Home() {
       className="flex-1 py-5 px-6 bg-slate-50"
       refreshControl={
         <RefreshControl
-          refreshing={isRefreshing}
-          onRefresh={loading}
+          refreshing={doctorsQuery.isRefetching || specialitiesQuery.isRefetching}
+          onRefresh={refreshData}
           tintColor={Colors.blue[300]}
           colors={[Colors.blue[300]]}
         />
@@ -125,20 +86,28 @@ export default function Home() {
         </Link>
       </View>
 
-      <FlatList
-        className="max-h-36 mb-6"
-        data={specialities}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Category
-            icon={specialtyIcons[item.name]}
-            name={item.name}
-            setSelectedOption={setSelectedOption}
-          />
-        )}
-      />
+      {specialitiesQuery.isPending ? (
+        <Text className="text-gray-500 mb-6">A carregar categorias...</Text>
+      ) : specialitiesQuery.isError ? (
+        <Text className="text-red-500 mb-6">
+          Não foi possível carregar as categorias.
+        </Text>
+      ) : (
+        <FlatList
+          className="max-h-36 mb-6"
+          data={specialities}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Category
+              icon={specialtyIcons[item.name]}
+              name={item.name}
+              setSelectedOption={setSelectedOption}
+            />
+          )}
+        />
+      )}
 
       <View className="mt-4 mb-5 flex flex-row justify-between items-center">
         <Text className="text-3xl font-medium">Doutores</Text>
@@ -150,20 +119,31 @@ export default function Home() {
       </View>
 
       <View className="pb-10">
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={filteredDoctors}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <Doctor
-              id={item.id}
-              name={item.name}
-              photo={item.photo!}
-              speciality={item.Specialty?.name!}
-            />
-          )}
-        />
+        {doctorsQuery.isPending ? (
+          <Text className="text-gray-500">A carregar médicos...</Text>
+        ) : doctorsQuery.isError ? (
+          <Text className="text-red-500">
+            Não foi possível carregar os médicos.
+          </Text>
+        ) : (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={filteredDoctors}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <Doctor
+                id={item.id}
+                name={item.name}
+                photo={item.photo ?? ""}
+                speciality={item.Specialty?.name ?? "Especialidade não indicada"}
+              />
+            )}
+            ListEmptyComponent={
+              <Text className="text-gray-500">Nenhum médico encontrado.</Text>
+            }
+          />
+        )}
       </View>
     </ScrollView>
   );
