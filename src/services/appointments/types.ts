@@ -1,11 +1,7 @@
-
-
-
-
 export interface ICreateAppointments {
     serviceId: string;
     doctorId: string;
-    bookingDate: Date;
+    bookingDate: string;
     bookingHour: string;
 }
 
@@ -23,4 +19,4 @@ export type IAppointmentSave = {
     idDoctor: string;
     idService: string;
     photo: string;
-}
+};
