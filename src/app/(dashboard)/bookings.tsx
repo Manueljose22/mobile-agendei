@@ -43,7 +43,7 @@ export default function Bookings() {
         </View>
       ) : (
         <ScrollView className="flex-1 p-5" refreshControl={
-          <RefreshControl refreshing={appointmentsQuery.isRefetching} onRefresh={() => appointmentsQuery.refetch()} colors={[Colors.blue[300]]} tintColor={Colors.blue[300]} />
+          <RefreshControl refreshing={appointmentsQuery.isRefetching} onRefresh={async () => { await appointmentsQuery.refetch(); }} colors={[Colors.blue[300]]} tintColor={Colors.blue[300]} />
         }>
           <FlatList scrollEnabled={false} data={bookings} keyExtractor={item => item.id.toString()}
             ListEmptyComponent={<Text className="text-center text-gray-500 py-8">Não tens agendamentos.</Text>}
