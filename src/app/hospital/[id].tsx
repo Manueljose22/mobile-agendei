@@ -64,35 +64,57 @@ export default function HospitalDetails() {
       </View>
 
       <View className="mt-2">
-        <View className="px-5 flex-1 flex-row items-center justify-between mb-4"><Text className="text-xl font-semibold text-gray-800">Especialidades</Text><Link href={{ pathname: "/hospital/[id]/specialties", params: { id } }}><Text className="text-base text-blue-600 font-medium">Ver todos</Text></Link></View>
-        {specialitiesQuery.isPending || doctorsQuery.isPending ? <ActivityIndicator color={Colors.blue[300]} /> : specialitiesQuery.isError || doctorsQuery.isError ? <Text className="px-5 text-gray-500">Não foi possível carregar as especialidades.</Text> : hospitalSpecialities.length ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20 }}>
-            <FlatList
-              data={hospitalSpecialities.slice(3)}
-              keyExtractor={(item) => item.id}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => <HospitalSpecialtyCard hospitalId={id} specialtyId={item.id} name={item.name} />}
-            />
-          
-          
-          </ScrollView>
-        ) : <Text className="px-5 text-gray-500">Este hospital ainda não tem especialidades com médicos associados.</Text>}
+        <View className="px-5 flex-row items-center justify-between mb-4">
+          <Text className="text-xl font-semibold text-gray-800">Especialidades</Text>
+          <Link href={{ pathname: "/hospital/[id]/specialties", params: { id } }}>
+            <Text className="text-base text-blue-600 font-medium">Ver todos</Text>
+          </Link>
+        </View>
+        {specialitiesQuery.isPending || doctorsQuery.isPending ? (
+          <ActivityIndicator color={Colors.blue[300]} />
+        ) : specialitiesQuery.isError || doctorsQuery.isError ? (
+          <Text className="px-5 text-gray-500">Não foi possível carregar as especialidades.</Text>
+        ) : hospitalSpecialities.length ? (
+          <FlatList
+            horizontal
+            data={hospitalSpecialities.slice(0, 3)}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <HospitalSpecialtyCard hospitalId={id} specialtyId={item.id} name={item.name} />
+            )}
+            ItemSeparatorComponent={() => <View className="w-3" />}
+            contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 4 }}
+            showsHorizontalScrollIndicator={false}
+          />
+        ) : (
+          <Text className="px-5 text-gray-500">Este hospital ainda não tem especialidades com médicos associados.</Text>
+        )}
       </View>
 
       <View className="mt-8">
-        <View className="px-5 flex-row items-center justify-between mb-4"><Text className="text-xl font-semibold text-gray-800">Médicos</Text><Link href={{ pathname: "/hospital/[id]/doctors", params: { id } }}><Text className="text-base text-blue-600 font-medium">Ver todos</Text></Link></View>
-        {doctorsQuery.isPending ? <ActivityIndicator color={Colors.blue[300]} /> : doctorsQuery.isError ? <Text className="px-5 text-gray-500">Não foi possível carregar os médicos.</Text> : hospitalDoctors.length ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20 }}>
-           <FlatList
-              data={hospitalDoctors.slice(3)}
-              keyExtractor={(item) => item.id}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => <HospitalDoctorCard doctor={item} />}
-            />
-          </ScrollView>
-        ) : <Text className="px-5 text-gray-500">Nenhum médico associado a este hospital.</Text>}
+        <View className="px-5 flex-row items-center justify-between mb-4">
+          <Text className="text-xl font-semibold text-gray-800">Médicos</Text>
+          <Link href={{ pathname: "/hospital/[id]/doctors", params: { id } }}>
+            <Text className="text-base text-blue-600 font-medium">Ver todos</Text>
+          </Link>
+        </View>
+        {doctorsQuery.isPending ? (
+          <ActivityIndicator color={Colors.blue[300]} />
+        ) : doctorsQuery.isError ? (
+          <Text className="px-5 text-gray-500">Não foi possível carregar os médicos.</Text>
+        ) : hospitalDoctors.length ? (
+          <FlatList
+            horizontal
+            data={hospitalDoctors.slice(0, 3)}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <HospitalDoctorCard doctor={item} />}
+            ItemSeparatorComponent={() => <View className="w-3" />}
+            contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 4 }}
+            showsHorizontalScrollIndicator={false}
+          />
+        ) : (
+          <Text className="px-5 text-gray-500">Nenhum médico associado a este hospital.</Text>
+        )}
       </View>
     </ScrollView>
   );
