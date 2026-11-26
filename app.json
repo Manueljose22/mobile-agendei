@@ -1,4 +1,3 @@
-
 {
   "expo": {
     "name": "agendei+",
@@ -8,24 +7,21 @@
     "icon": "./assets/images/icon.png",
     "scheme": "agende",
     "userInterfaceStyle": "automatic",
-
     "ios": {
       "supportsTablet": true
     },
-
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.manuel_jose.agendei"
     },
-
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/icon.png"
     },
-
     "plugins": [
       "expo-router",
       [
@@ -39,6 +35,16 @@
       ],
       "expo-secure-store",
       "expo-notifications"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "24493329-0f82-4272-96b6-7ef8933d2f85"
+      }
+    }
   }
 }
