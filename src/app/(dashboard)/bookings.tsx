@@ -1,5 +1,6 @@
 import { Booking } from "@/src/components/booking/booking";
 import { AppointmentServices } from "@/src/services/appointments/AppoitmentsService";
+import { IAppointmentSave } from "@/src/services/appointments/types";
 import { useAppointmentsQuery } from "@/src/hooks/queries/useAppointmentsQuery";
 import { queryKeys } from "@/src/services/queries/queryKeys";
 import { Colors } from "@/src/styles/colors";
@@ -22,6 +23,15 @@ export default function Bookings() {
   const cancelBooking = async (id: string) => {
     try {
       await AppointmentServices.Cancel(id);
+
+      // Actualiza o card no cache assim que a API confirma o cancelamento.
+      queryClient.setQueryData<IAppointmentSave[]>(
+        queryKeys.appointments.all,
+        current => current?.map(item =>
+          item.id === id ? { ...item, status: "Cancelado" } : item
+        )
+      );
+
       await queryClient.invalidateQueries({ queryKey: queryKeys.appointments.all });
       await queryClient.invalidateQueries({ queryKey: queryKeys.notifications.all });
     } catch (error: any) {
@@ -50,7 +60,8 @@ export default function Bookings() {
             renderItem={({ item }) => (
               <Booking photo={item.photo} day={item.booking_date} hour={item.booking_hour}
                 service={item.service} speciality={item.specialty} doctor={item.doctor}
-                hospital={item.hospitalname} btnCancel={() => cancelBooking(item.id)}
+                hospital={item.hospitalname} status={item.status}
+                btnCancel={() => cancelBooking(item.id)}
                 btnUpdate={() => updateBooking(item.id, item.idDoctor, item.idService)} />
             )} />
         </ScrollView>
