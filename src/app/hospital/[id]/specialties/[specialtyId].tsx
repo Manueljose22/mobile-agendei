@@ -75,7 +75,7 @@ export default function HospitalSpecialtyDoctorsScreen() {
           </Text>
         </View>
       }
-      renderItem={({ item }) => <HospitalDoctorCard doctor={item} />}
+      renderItem={({ item }) => <HospitalDoctorCard doctor={item} layout="grid" />}
       ListEmptyComponent={
         <Text className="py-10 text-center text-gray-500">
           Não foram encontrados médicos desta especialidade neste hospital.
