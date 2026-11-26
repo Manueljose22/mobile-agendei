@@ -32,7 +32,7 @@ export default function NotificationsScreen() {
   </View>;
 
   return <FlatList className="flex-1 bg-slate-50" contentContainerStyle={{ padding: 16, flexGrow: 1 }} data={items} keyExtractor={item => item.id}
-    refreshControl={<RefreshControl refreshing={query.isRefetching} onRefresh={() => query.refetch()} tintColor="#0D6EFD" />}
+    refreshControl={<RefreshControl refreshing={query.isRefetching} onRefresh={async () => { await query.refetch(); }} tintColor="#0D6EFD" />}
     ListEmptyComponent={<View className="flex-1 items-center justify-center py-20"><Text className="text-gray-500">Não tens notificações.</Text></View>}
     renderItem={({ item }) => <Pressable onPress={() => markRead(item)} className={`mb-3 rounded-xl p-4 border ${item.isRead ? "bg-white border-gray-100" : "bg-blue-50 border-blue-100"}`}>
       <View className="flex-row items-start justify-between"><Text className="font-semibold text-gray-800 flex-1 mr-2">{item.title}</Text>{!item.isRead && <View className="w-2 h-2 rounded-full bg-blue-600 mt-2" />}</View>
