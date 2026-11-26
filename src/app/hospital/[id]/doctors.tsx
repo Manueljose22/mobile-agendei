@@ -69,7 +69,7 @@ export default function HospitalDoctorsScreen() {
           </Text>
         </View>
       }
-      renderItem={({ item }) => <HospitalDoctorCard doctor={item} />}
+      renderItem={({ item }) => <HospitalDoctorCard doctor={item} layout="grid" />}
       ListEmptyComponent={
         <Text className="py-10 text-center text-gray-500">
           Este hospital ainda não tem médicos associados.
