@@ -19,6 +19,7 @@ import {
     StatusBar,
     Text,
     View,
+    Pressable,
 } from "react-native";
 
 export default function Home() {
@@ -77,7 +78,7 @@ export default function Home() {
           className="w-2/4 h-10"
           source={require("@/src/assets/logo.png")}
         />
-        <BellSimpleIcon size={32} onPress={() => router.push("/notifications")} />
+        <Pressable onPress={() => router.push("/notifications")} hitSlop={10} accessibilityRole="button" accessibilityLabel="Abrir notificações"><BellSimpleIcon size={32} /></Pressable>
       </View>
 
       <Text className="text-3xl text-gray-600 font-medium my-8">
