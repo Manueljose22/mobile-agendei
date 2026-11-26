@@ -91,6 +91,27 @@ function RootLayoutContent() {
         }} />
         <Stack.Screen name="hospital/[id]/specialties/[specialtyId]" options={{
           headerShown: true,
+          title: "Médicos da Especialidade",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/doctors" options={{
+          headerShown: true,
+          title: "Médicos do Hospital",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/specialties" options={{
+          headerShown: true,
+          title: "Especialidades do Hospital",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/specialties/[specialtyId]" options={{
+          headerShown: true,
           title: "Médicos por Especialidade",
           headerTintColor: "#212121",
           headerTitleAlign: "center",
