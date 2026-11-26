@@ -75,7 +75,7 @@ export default function HospitalSpecialtiesScreen() {
         </View>
       }
       renderItem={({ item }) => (
-        <HospitalSpecialtyCard hospitalId={id} specialtyId={item.id} name={item.name} />
+        <HospitalSpecialtyCard hospitalId={id} specialtyId={item.id} name={item.name} layout="grid" />
       )}
       ListEmptyComponent={
         <Text className="py-10 text-center text-gray-500">
