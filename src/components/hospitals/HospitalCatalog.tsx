@@ -7,12 +7,14 @@ type HospitalSpecialtyCardProps = {
   hospitalId: string;
   specialtyId: string;
   name: string;
+  layout?: "horizontal" | "grid";
 };
 
 export function HospitalSpecialtyCard({
   hospitalId,
   specialtyId,
   name,
+  layout = "horizontal",
 }: HospitalSpecialtyCardProps) {
   return (
     <Link
@@ -22,7 +24,7 @@ export function HospitalSpecialtyCard({
       }}
       asChild
     >
-      <Pressable className="w-36 rounded-2xl border border-gray-100 bg-white p-4 active:opacity-70">
+      <Pressable className={`${layout === "grid" ? "flex-1" : "w-36"} rounded-2xl border border-gray-100 bg-white p-4 active:opacity-70">
         <View className="h-12 w-12 items-center justify-center rounded-full bg-blue-50">
           {specialtyIcons[name] ?? (
             <Text className="text-xl font-semibold text-blue-600">
@@ -39,10 +41,10 @@ export function HospitalSpecialtyCard({
   );
 }
 
-export function HospitalDoctorCard({ doctor }: { doctor: IDoctorsSave }) {
+export function HospitalDoctorCard({ doctor, layout = "horizontal" }: { doctor: IDoctorsSave; layout?: "horizontal" | "grid" }) {
   return (
     <Link href={{ pathname: "/doctor/[id]", params: { id: doctor.id } }} asChild>
-      <Pressable className="w-40 rounded-2xl border border-gray-100 bg-white p-3 active:opacity-70">
+      <Pressable className={`${layout === "grid" ? "flex-1" : "w-40"} rounded-2xl border border-gray-100 bg-white p-3 active:opacity-70">
         <Image
           source={{
             uri:
