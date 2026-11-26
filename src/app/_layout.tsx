@@ -42,7 +42,8 @@ function RootLayoutContent() {
   }, [hasHydrated, user?.token, logout]);
 
   return (
-    <View className="flex-1">\n      <ExpoNotificationManager />
+    <View className="flex-1">
+      <ExpoNotificationManager />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="notifications/index" options={{ headerShown: true, title: "Notificações", headerTintColor: "#212121", headerTitleAlign: "center", headerShadowVisible: false }} />
