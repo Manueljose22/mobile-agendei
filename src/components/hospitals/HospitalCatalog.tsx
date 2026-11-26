@@ -1,4 +1,5 @@
 import { IDoctorsSave } from "@/src/services/doctors/types";
+import { specialtyIcons } from "@/src/constants/specialtyIcons";
 import { Link } from "expo-router";
 import { Image, Text, View } from "react-native";
 
@@ -22,9 +23,11 @@ export function HospitalSpecialtyCard({
       className="mr-3 w-36 rounded-2xl border border-gray-100 bg-white p-4"
     >
       <View className="h-12 w-12 items-center justify-center rounded-full bg-blue-50">
-        <Text className="text-xl font-semibold text-blue-600">
-          {name.slice(0, 1).toUpperCase()}
-        </Text>
+        {specialtyIcons[name] ?? (
+          <Text className="text-xl font-semibold text-blue-600">
+            {name.slice(0, 1).toUpperCase()}
+          </Text>
+        )}
       </View>
       <Text className="mt-3 font-semibold text-gray-800" numberOfLines={2}>
         {name}
