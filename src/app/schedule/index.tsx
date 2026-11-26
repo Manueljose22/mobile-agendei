@@ -52,13 +52,12 @@ export default function Schedule() {
         if (!seletedHour || !seletedDate) { Alert.alert("Atenção!", "Por favor, selecione uma data e horário."); return; }
         setLoarding(true);
         try {
-            setVisible(true);
             if (idAppointment) {
-                await AppointmentServices.Reschedule(idAppointment, { bookingDate: new Date(seletedDate), bookingHour: seletedHour });
-                setVisible(false); router.replace("/(dashboard)/bookings");
+                await AppointmentServices.Reschedule(idAppointment, { bookingDate: seletedDate, bookingHour: seletedHour });
+                router.replace("/(dashboard)/bookings");
             } else {
-                await AppointmentServices.Create({ doctorId, serviceId: idService, bookingDate: new Date(seletedDate), bookingHour: seletedHour });
-                setVisible(false); router.replace("/(dashboard)/home");
+                await AppointmentServices.Create({ doctorId, serviceId: idService, bookingDate: seletedDate, bookingHour: seletedHour });
+                setVisible(true);
             }
         } catch (error: any) {
             setVisible(false); Alert.alert("Não foi possível agendar", error?.message ?? "Tente novamente.");
