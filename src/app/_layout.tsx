@@ -44,6 +44,7 @@ function RootLayoutContent() {
     <View className="flex-1">
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="notifications/index" options={{ headerShown: true, title: "Notificações", headerTintColor: "#212121", headerTitleAlign: "center", headerShadowVisible: false }} />
 
         <Stack.Screen name="home/listCategories" options={{
           headerShown: true,

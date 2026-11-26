@@ -8,7 +8,7 @@ import { useHospitalsQuery } from "@/src/hooks/queries/useHospitalsQuery";
 import { useSpecialitiesQuery } from "@/src/hooks/queries/useSpecialitiesQuery";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { Colors } from "@/src/styles/colors";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { BellSimpleIcon } from "phosphor-react-native";
 import { useState } from "react";
 import {
@@ -77,7 +77,7 @@ export default function Home() {
           className="w-2/4 h-10"
           source={require("@/src/assets/logo.png")}
         />
-        <BellSimpleIcon size={32} />
+        <BellSimpleIcon size={32} onPress={() => router.push("/notifications")} />
       </View>
 
       <Text className="text-3xl text-gray-600 font-medium my-8">
