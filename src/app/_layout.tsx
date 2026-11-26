@@ -5,6 +5,7 @@ import { ActivityIndicator, View } from "react-native";
 import { PatientsServices } from "@/src/services/patient/PatientServices";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { QueryProvider } from "@/src/providers/QueryProvider";
+import ExpoNotificationManager from "@/src/components/notifications/ExpoNotificationManager";
 
 function RootLayoutContent() {
   const { user, hasHydrated, logout } = useAuthStore();
@@ -41,7 +42,7 @@ function RootLayoutContent() {
   }, [hasHydrated, user?.token, logout]);
 
   return (
-    <View className="flex-1">
+    <View className="flex-1">\n      <ExpoNotificationManager />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="notifications/index" options={{ headerShown: true, title: "Notificações", headerTintColor: "#212121", headerTitleAlign: "center", headerShadowVisible: false }} />
