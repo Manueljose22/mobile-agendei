@@ -16,5 +16,19 @@ export const NotificationsServices = {
         } catch (error: any) {
             throw new Error(error.response?.data?.message ?? "Não foi possível marcar a notificação como lida.");
         }
+    },
+    async RegisterPushToken(expoPushToken: string): Promise<void> {
+        try {
+            await Api.put("/notifications/push-token", { expoPushToken });
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message ?? "Não foi possível registar o dispositivo.");
+        }
+    },
+    async RemovePushToken(expoPushToken: string): Promise<void> {
+        try {
+            await Api.delete("/notifications/push-token", { data: { expoPushToken } });
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message ?? "Não foi possível remover o dispositivo.");
+        }
     }
 };
