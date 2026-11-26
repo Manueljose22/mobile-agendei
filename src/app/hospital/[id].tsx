@@ -4,8 +4,8 @@ import { useHospitalQuery } from "@/src/hooks/queries/useHospitalsQuery";
 import { useSpecialitiesQuery } from "@/src/hooks/queries/useSpecialitiesQuery";
 import { Colors } from "@/src/styles/colors";
 import { Link, useLocalSearchParams } from "expo-router";
-import { MapPinIcon, PhoneIcon, EnvelopeSimpleIcon } from "phosphor-react-native";
-import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { EnvelopeSimpleIcon, MapPinIcon, PhoneIcon } from "phosphor-react-native";
+import { ActivityIndicator, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function HospitalDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -38,14 +38,21 @@ export default function HospitalDetails() {
         <View className="flex-row items-start mt-5"><MapPinIcon size={22} color={Colors.blue[300]} /><Text className="text-base text-gray-600 ml-3 flex-1">{hospital.address}</Text></View>
         {hospital.phone ? <View className="flex-row items-center mt-4"><PhoneIcon size={22} color={Colors.blue[300]} /><Text className="text-base text-gray-600 ml-3">{hospital.phone}</Text></View> : null}
         {hospital.email ? <View className="flex-row items-center mt-4"><EnvelopeSimpleIcon size={22} color={Colors.blue[300]} /><Text className="text-base text-gray-600 ml-3">{hospital.email}</Text></View> : null}
-        <View className="mt-7 border-t border-gray-200 pt-5"><Text className="text-lg font-semibold text-gray-800">Informações</Text><Text className="text-sm text-gray-500 mt-2">Estado: {hospital.status === "ACTIVE" ? "Activo" : "Suspenso"}</Text></View>
       </View>
 
       <View className="mt-2">
-        <View className="px-5 flex-row items-center justify-between mb-4"><Text className="text-xl font-semibold text-gray-800">Especialidades</Text><Link href={{ pathname: "/hospital/[id]/specialties", params: { id } }}><Text className="text-base text-blue-600 font-medium">Ver todos</Text></Link></View>
+        <View className="px-5 flex-1 flex-row items-center justify-between mb-4"><Text className="text-xl font-semibold text-gray-800">Especialidades</Text><Link href={{ pathname: "/hospital/[id]/specialties", params: { id } }}><Text className="text-base text-blue-600 font-medium">Ver todos</Text></Link></View>
         {specialitiesQuery.isPending || doctorsQuery.isPending ? <ActivityIndicator color={Colors.blue[300]} /> : specialitiesQuery.isError || doctorsQuery.isError ? <Text className="px-5 text-gray-500">Não foi possível carregar as especialidades.</Text> : hospitalSpecialities.length ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20 }}>
-            {hospitalSpecialities.slice(0, 3).map((specialty) => <HospitalSpecialtyCard key={specialty.id} hospitalId={id} specialtyId={specialty.id} name={specialty.name} />)}
+            <FlatList
+              data={hospitalSpecialities.slice(3)}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => <HospitalSpecialtyCard hospitalId={id} specialtyId={item.id} name={item.name} />}
+            />
+          
+          
           </ScrollView>
         ) : <Text className="px-5 text-gray-500">Este hospital ainda não tem especialidades com médicos associados.</Text>}
       </View>
@@ -54,7 +61,13 @@ export default function HospitalDetails() {
         <View className="px-5 flex-row items-center justify-between mb-4"><Text className="text-xl font-semibold text-gray-800">Médicos</Text><Link href={{ pathname: "/hospital/[id]/doctors", params: { id } }}><Text className="text-base text-blue-600 font-medium">Ver todos</Text></Link></View>
         {doctorsQuery.isPending ? <ActivityIndicator color={Colors.blue[300]} /> : doctorsQuery.isError ? <Text className="px-5 text-gray-500">Não foi possível carregar os médicos.</Text> : hospitalDoctors.length ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20 }}>
-            {hospitalDoctors.slice(0, 3).map((doctor) => <HospitalDoctorCard key={doctor.id} doctor={doctor} />)}
+           <FlatList
+              data={hospitalDoctors.slice(3)}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => <HospitalDoctorCard doctor={item} />}
+            />
           </ScrollView>
         ) : <Text className="px-5 text-gray-500">Nenhum médico associado a este hospital.</Text>}
       </View>
