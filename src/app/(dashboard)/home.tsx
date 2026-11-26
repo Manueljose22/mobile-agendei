@@ -6,6 +6,7 @@ import { specialtyIcons } from "@/src/constants/specialtyIcons";
 import { useDoctorsQuery } from "@/src/hooks/queries/useDoctorsQuery";
 import { useHospitalsQuery } from "@/src/hooks/queries/useHospitalsQuery";
 import { useSpecialitiesQuery } from "@/src/hooks/queries/useSpecialitiesQuery";
+import { useNotificationsQuery } from "@/src/hooks/queries/useNotificationsQuery";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { Colors } from "@/src/styles/colors";
 import { Link, router } from "expo-router";
@@ -29,6 +30,8 @@ export default function Home() {
   const doctorsQuery = useDoctorsQuery();
   const specialitiesQuery = useSpecialitiesQuery();
   const hospitalsQuery = useHospitalsQuery();
+  const notificationsQuery = useNotificationsQuery();
+  const unreadCount = (notificationsQuery.data ?? []).filter((notification) => !notification.isRead).length;
   const { user } = useAuthStore();
 
   const doctors = doctorsQuery.data ?? [];
@@ -79,7 +82,7 @@ export default function Home() {
           className="w-2/4 h-10"
           source={require("@/src/assets/logo.png")}
         />
-        <Pressable onPress={() => router.push("/notifications")} hitSlop={10} accessibilityRole="button" accessibilityLabel="Abrir notificações"><BellSimpleIcon size={32} /></Pressable>
+        <Pressable onPress={() => router.push("/notifications")} hitSlop={10} accessibilityRole="button" accessibilityLabel="Abrir notificações" className="relative p-1"><BellSimpleIcon size={32} />{unreadCount > 0 && <View className="absolute -top-1 -right-1 min-w-5 h-5 rounded-full bg-red-600 px-1 items-center justify-center"><Text className="text-white text-xs font-bold">{unreadCount > 99 ? "99+" : unreadCount}</Text></View>}</Pressable>
       </View>
 
       <Text className="text-3xl text-gray-600 font-medium my-8">
