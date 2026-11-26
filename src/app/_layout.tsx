@@ -42,7 +42,8 @@ function RootLayoutContent() {
   }, [hasHydrated, user?.token, logout]);
 
   return (
-    <View className="flex-1">\n      <ExpoNotificationManager />
+    <View className="flex-1">
+      <ExpoNotificationManager />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="notifications/index" options={{ headerShown: true, title: "Notificações", headerTintColor: "#212121", headerTitleAlign: "center", headerShadowVisible: false }} />
@@ -73,6 +74,48 @@ function RootLayoutContent() {
           title: "Detalhes do Hospital",
           headerTintColor: "#212121",
           headerTitleAlign: 'center',
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/doctors" options={{
+          headerShown: true,
+          title: "Médicos do Hospital",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/specialties" options={{
+          headerShown: true,
+          title: "Especialidades do Hospital",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/specialties/[specialtyId]" options={{
+          headerShown: true,
+          title: "Médicos da Especialidade",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/doctors" options={{
+          headerShown: true,
+          title: "Médicos do Hospital",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/specialties" options={{
+          headerShown: true,
+          title: "Especialidades do Hospital",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+        }} />
+        <Stack.Screen name="hospital/[id]/specialties/[specialtyId]" options={{
+          headerShown: true,
+          title: "Médicos por Especialidade",
+          headerTintColor: "#212121",
+          headerTitleAlign: "center",
           headerShadowVisible: false
         }} />
         <Stack.Screen name="doctor/[id]" options={{
