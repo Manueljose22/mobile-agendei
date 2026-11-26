@@ -5,10 +5,13 @@ import { useSpecialitiesQuery } from "@/src/hooks/queries/useSpecialitiesQuery";
 import { Colors } from "@/src/styles/colors";
 import { Link, useLocalSearchParams } from "expo-router";
 import { EnvelopeSimpleIcon, MapPinIcon, PhoneIcon } from "phosphor-react-native";
-import { ActivityIndicator, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, FlatList, Image, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 
 export default function HospitalDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { width: screenWidth } = useWindowDimensions();
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const hospitalQuery = useHospitalQuery(id);
   const doctorsQuery = useDoctorsQuery();
   const specialitiesQuery = useSpecialitiesQuery();
@@ -28,9 +31,29 @@ export default function HospitalDetails() {
   return (
     <ScrollView className="flex-1 bg-slate-50" contentContainerStyle={{ paddingBottom: 32 }} showsVerticalScrollIndicator={false}>
       {hospital.images.length > 0 ? (
-        <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
-          {hospital.images.map((image, index) => <Image key={`${image.urlImagem}-${index}`} source={{ uri: image.urlImagem }} className="w-screen h-64" resizeMode="cover" />)}
-        </ScrollView>
+        <View>
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onMomentumScrollEnd={(event) => {
+              const nextIndex = Math.round(event.nativeEvent.contentOffset.x / screenWidth);
+              setActiveImageIndex(Math.min(nextIndex, hospital.images.length - 1));
+            }}
+          >
+            {hospital.images.map((image, index) => <Image key={`${image.urlImagem}-${index}`} source={{ uri: image.urlImagem }} style={{ width: screenWidth, height: 256 }} resizeMode="cover" />)}
+          </ScrollView>
+          {hospital.images.length > 1 ? (
+            <View className="absolute bottom-3 left-0 right-0 flex-row items-center justify-center">
+              {hospital.images.map((image, index) => (
+                <View
+                  key={`${image.urlImagem}-indicator-${index}`}
+                  className={`h-2 rounded-full mx-1 ${activeImageIndex === index ? "w-5 bg-white" : "w-2 bg-white/60"}`}
+                />
+              ))}
+            </View>
+          ) : null}
+        </View>
       ) : <View className="h-52 bg-slate-100 items-center justify-center"><Text className="text-gray-400">Sem imagens disponíveis</Text></View>}
 
       <View className="px-5 py-6">
