@@ -12,8 +12,11 @@ export default function Bookings() {
   const queryClient = useQueryClient();
   const bookings = appointmentsQuery.data ?? [];
 
-  const updateBooking = (id: string) => {
-    router.navigate({ pathname: "/schedule", params: { idAppointment: id } });
+  const updateBooking = (id: string, doctorId: string, serviceId: string) => {
+    router.navigate({
+      pathname: "/schedule",
+      params: { idAppointment: id, doctorId, idService: serviceId },
+    });
   };
 
   const cancelBooking = async (id: string) => {
@@ -22,7 +25,7 @@ export default function Bookings() {
       await queryClient.invalidateQueries({ queryKey: queryKeys.appointments.all });
       await queryClient.invalidateQueries({ queryKey: queryKeys.notifications.all });
     } catch (error: any) {
-      Alert.alert("Agendamento", error?.message ?? "Não foi possível cancelar.");
+      Alert.alert("Agendamento", error?.message ?? "Não foi possível cancelar o agendamento. Tenta novamente.");
     }
   };
 
@@ -48,7 +51,7 @@ export default function Bookings() {
               <Booking photo={item.photo} day={item.booking_date} hour={item.booking_hour}
                 service={item.service} speciality={item.specialty} doctor={item.doctor}
                 hospital={item.hospitalname} btnCancel={() => cancelBooking(item.id)}
-                btnUpdate={() => updateBooking(item.id)} />
+                btnUpdate={() => updateBooking(item.id, item.idDoctor, item.idService)} />
             )} />
         </ScrollView>
       )}
