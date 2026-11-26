@@ -6,6 +6,8 @@ import { Picker } from '@react-native-picker/picker';
 import { router, useLocalSearchParams } from "expo-router";
 import { CheckCircleIcon } from 'phosphor-react-native';
 import { useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/src/services/queries/queryKeys";
 import { Alert, Modal, Pressable, StatusBar, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,6 +21,7 @@ const hourLabel = (minutes: number) => { const m = ((minutes % 1440) + 1440) % 1
 
 export default function Schedule() {
     const { idService, doctorId, idAppointment } = useLocalSearchParams<{ doctorId: string, idService: string, idAppointment: string }>();
+    const queryClient = useQueryClient();
     const today = dateKey(new Date());
     const rangeEnd = useMemo(() => { const d = new Date(); d.setDate(d.getDate() + 90); return dateKey(d); }, []);
     const { data, isLoading, isError, refetch } = useDoctorAvailabilityQuery(doctorId, today, rangeEnd);
@@ -57,6 +60,8 @@ export default function Schedule() {
         try {
             if (idAppointment) {
                 await AppointmentServices.Reschedule(idAppointment, { bookingDate: seletedDate, bookingHour: seletedHour });
+                await queryClient.invalidateQueries({ queryKey: queryKeys.appointments.all });
+                await queryClient.invalidateQueries({ queryKey: queryKeys.notifications.all });
                 router.replace("/(dashboard)/bookings");
             } else {
                 await AppointmentServices.Create({ doctorId, serviceId: idService, bookingDate: seletedDate, bookingHour: seletedHour });
@@ -72,7 +77,7 @@ export default function Schedule() {
         
         {isLoading ? <Text className="text-gray-600 py-4">A carregar disponibilidade...</Text> : null}
         {isError ? <View className="py-3"><Text className="text-red-600 mb-2">Não foi possível carregar os horários.</Text><Button loading={false} text="Tentar novamente" onPress={() => refetch()} /></View> : null}
-        {!isLoading && !isError && availableDates.size === 0 ? <Text className="text-gray-600 py-4">Sem disponibilidade nos próximos 90 dias.</Text> : null}
+        {!isLoading && !isError && availableDates.size === 0 ? <View className="py-4"><Text className="text-gray-600 mb-3">{idAppointment ? "Não existem horários disponíveis nos próximos 90 dias. O teu agendamento actual mantém-se como está. Podes voltar e cancelá-lo se a data já não for conveniente." : "Sem disponibilidade nos próximos 90 dias."}</Text>{idAppointment ? <Button loading={false} text="Voltar aos meus agendamentos" onPress={() => router.replace("/(dashboard)/bookings")} /> : null}</View> : null}
 
         <Calendar minDate={today} maxDate={rangeEnd} onDayPress={day => { if (availableDates.has(day.dateString)) { setSeletedDate(day.dateString); setSeletedHour(''); } }} markedDates={markedDates}
             dayComponent={({ date, state }) => {
@@ -88,7 +93,7 @@ export default function Schedule() {
         {!seletedDate ? <Text className="text-gray-500 py-2">Escolha um dia assinalado no calendário.</Text> : selectedHours.length === 0 ? <Text className="text-gray-500 py-2">Sem horários disponíveis para este dia.</Text> : null}
         <Picker selectedValue={seletedHour} onValueChange={value => setSeletedHour(value)}><Picker.Item label="Selecione um horário" value="" />{selectedHours.map(h => <Picker.Item key={h} label={h} value={h} />)}</Picker>
 
-        <Button loading={loarding} text={'Finalizar marcação'} onPress={handleSchedule} />
+        <Button loading={loarding} text={idAppointment ? "Actualizar data e horário" : "Finalizar marcação"} onPress={handleSchedule} />
 
         <Modal visible={visible} onRequestClose={() => setVisible(false)} animationType='slide' transparent><View className="flex-1 justify-center items-center bg-black/50 p-6"><View className="bg-white rounded-2xl p-6 w-full max-w-md items-center">
             <CheckCircleIcon size={64} color="#4ade80" weight="fill" /><Text className="text-lg font-medium text-gray-800 mb-4">Agendamento realizado!</Text>
