@@ -3,7 +3,6 @@ import { INotification } from "@/src/services/notifications/types";
 import { useNotificationsQuery } from "@/src/hooks/queries/useNotificationsQuery";
 import { queryKeys } from "@/src/services/queries/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, Text, View } from "react-native";
 
 const dateLabel = (value: string) => new Date(value).toLocaleString("pt-PT", { dateStyle: "short", timeStyle: "short" });

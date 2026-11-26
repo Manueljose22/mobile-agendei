@@ -6,6 +6,8 @@ export function useNotificationsQuery() {
   return useQuery({
     queryKey: queryKeys.notifications.all,
     queryFn: NotificationsServices.GetAll,
-    staleTime: 60 * 1000,
+    staleTime: 0,
+    refetchInterval: 15 * 1000,
+    refetchIntervalInBackground: false,
   });
 }
