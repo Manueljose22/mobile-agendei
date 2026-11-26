@@ -30,7 +30,7 @@ export const AppointmentServices = {
 
     async Cancel(id: string): Promise<void> {
         try {
-            await Api.put(`/appointments/cancel/${id}`);
+            await Api.patch(`/appointments/cancel/${id}`);
         } catch (error: any) {
             throw new Error(error.response?.data?.message ?? "Não foi possível cancelar.");
         }
