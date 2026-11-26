@@ -12,14 +12,15 @@ import { Link, router } from "expo-router";
 import { BellSimpleIcon } from "phosphor-react-native";
 import { useState } from "react";
 import {
+    ActivityIndicator,
     FlatList,
     Image,
+    Pressable,
     RefreshControl,
     ScrollView,
     StatusBar,
     Text,
     View,
-    Pressable,
 } from "react-native";
 
 export default function Home() {
@@ -97,7 +98,7 @@ export default function Home() {
       </View>
 
       {specialitiesQuery.isPending ? (
-        <Text className="text-gray-500 mb-6">A carregar categorias...</Text>
+          <ActivityIndicator size="large" color={Colors.blue[300]} />
       ) : specialitiesQuery.isError ? (
         <Text className="text-red-500 mb-6">
           Não foi possível carregar as categorias.
@@ -129,7 +130,8 @@ export default function Home() {
       </View>
 
       {hospitalsQuery.isPending ? (
-        <Text className="text-gray-500 mb-6">A carregar hospitais...</Text>
+          <ActivityIndicator size="large" color={Colors.blue[300]} />
+
       ) : hospitalsQuery.isError ? (
         <Text className="text-red-500 mb-6">
           Não foi possível carregar os hospitais.
@@ -162,7 +164,8 @@ export default function Home() {
 
       <View className="pb-10">
         {doctorsQuery.isPending ? (
-          <Text className="text-gray-500">A carregar médicos...</Text>
+            <ActivityIndicator size="large" color={Colors.blue[300]} />
+
         ) : doctorsQuery.isError ? (
           <Text className="text-red-500">
             Não foi possível carregar os médicos.
