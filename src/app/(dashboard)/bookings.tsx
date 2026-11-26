@@ -1,13 +1,13 @@
 import { Booking } from "@/src/components/booking/booking";
+import { useAppointmentsQuery } from "@/src/hooks/queries/useAppointmentsQuery";
 import { AppointmentServices } from "@/src/services/appointments/AppoitmentsService";
 import { IAppointmentSave } from "@/src/services/appointments/types";
-import { useAppointmentsQuery } from "@/src/hooks/queries/useAppointmentsQuery";
 import { queryKeys } from "@/src/services/queries/queryKeys";
 import { Colors } from "@/src/styles/colors";
-import { router } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
 import { useMemo, useState } from "react";
-import { Alert, ActivityIndicator, FlatList, RefreshControl, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 
 type BookingStatus = "Pendente" | "Confirmado" | "Cancelado";
 
@@ -86,25 +86,25 @@ export default function Bookings() {
             />
           }
         >
-          <View className="flex-row bg-gray-100 rounded-xl p-1 mb-5">
+          <View className="flex-row justify-center items-center rounded-xl mb-5">
             {statusOptions.map(status => {
               const isSelected = selectedStatus === status;
               return (
-                <TouchableOpacity
+                <Pressable
                   key={status}
                   onPress={() => setSelectedStatus(status)}
                   accessibilityRole="tab"
                   accessibilityState={{ selected: isSelected }}
-                  className={`flex-1 rounded-lg py-3 px-1 items-center justify-center ${isSelected ? "bg-white" : "bg-transparent"}`}
-                  style={isSelected ? { elevation: 2 } : undefined}
+                  className={`flex-row gap-6 rounded-lg py-2 px-2 items-center justify-center ${isSelected ? "bg-transparent shadow-none  border-b-2 border-blue-600" : "bg-transparent shadow-none"}`}
+                  style={isSelected ? { elevation: 2, } : undefined}
                 >
-                  <Text className={`text-xs font-semibold ${isSelected ? "text-blue-700" : "text-gray-500"}`}>
+                  <Text className={`text-sm font-semibold ${isSelected ? "text-blue-700" : "text-gray-600"}`}>
                     {status}
                   </Text>
-                  <Text className={`text-xs mt-1 ${isSelected ? "text-blue-600" : "text-gray-400"}`}>
+                  <Text className={`text-xs ${isSelected ? "text-blue-600" : "text-gray-400"}`}>
                     {statusCounts[status]}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               );
             })}
           </View>
