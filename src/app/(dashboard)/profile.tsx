@@ -199,7 +199,7 @@ export default function Profile() {
                     color="default"
                     icon={<InfoIcon size={25} color={Colors.gray[200]} weight="regular" />}
                     linkText="Sobre"
-                    linkUrl={{ pathname: "/dashboard/about" }}
+                    linkUrl={{ pathname: "/about" }}
                 />
                 <Pressable
                     onPress={handleLogout}
