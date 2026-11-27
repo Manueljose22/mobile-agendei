@@ -193,13 +193,13 @@ export default function Profile() {
                     color="default"
                     icon={<BellIcon size={25} color={Colors.gray[200]} weight="regular" />}
                     linkText="Notificações"
-                    linkUrl={{ pathname: "/dashboard/about" }}
+                    linkUrl="/notifications"
                 />
                 <InfoContent
                     color="default"
                     icon={<InfoIcon size={25} color={Colors.gray[200]} weight="regular" />}
                     linkText="Sobre"
-                    linkUrl={{ pathname: "/about" }}
+                    linkUrl="/(dashboard)/about"
                 />
                 <Pressable
                     onPress={handleLogout}
