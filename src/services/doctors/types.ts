@@ -50,4 +50,5 @@ export type IDoctorsService = {
   idService: string;
   title: string;
   price: number;
+  durationMinutes: number;
 }
