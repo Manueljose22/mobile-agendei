@@ -1,5 +1,5 @@
-import { IDoctorsSave } from "@/src/services/doctors/types";
 import { specialtyIcons } from "@/src/constants/specialtyIcons";
+import { IDoctorsSave } from "@/src/services/doctors/types";
 import { Link } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 
@@ -25,17 +25,17 @@ export function HospitalSpecialtyCard({
       asChild
     >
       <Pressable className={`${layout === "grid" ? "flex-1" : "w-36"} rounded-2xl border border-gray-100 bg-white p-4 active:opacity-70`}>
-        <View className="h-12 w-12 items-center justify-center rounded-full bg-blue-50">
+        <View style={{ elevation: 5 }} className="h-36 mb-4 flex flex-col  me-3 rounded-lg py-4 shadow-md shadow-slate-500h-10 w-10 items-center justify-center  bg-blue-50">
           {specialtyIcons[name] ?? (
             <Text className="text-xl font-semibold text-blue-600">
               {name.slice(0, 1).toUpperCase()}
             </Text>
           )}
+          
         </View>
         <Text className="mt-3 font-semibold text-gray-800" numberOfLines={2}>
           {name}
         </Text>
-        <Text className="mt-1 text-xs text-blue-600">Ver médicos</Text>
       </Pressable>
     </Link>
   );

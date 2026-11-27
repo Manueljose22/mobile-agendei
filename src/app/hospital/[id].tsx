@@ -62,7 +62,6 @@ export default function HospitalDetails() {
         {hospital.phone ? <View className="flex-row items-center mt-4"><PhoneIcon size={22} color={Colors.blue[300]} /><Text className="text-base text-gray-600 ml-3">{hospital.phone}</Text></View> : null}
         {hospital.email ? <View className="flex-row items-center mt-4"><EnvelopeSimpleIcon size={22} color={Colors.blue[300]} /><Text className="text-base text-gray-600 ml-3">{hospital.email}</Text></View> : null}
       </View>
-
       <View className="mt-2">
         <View className="px-5 flex-row items-center justify-between mb-4">
           <Text className="text-xl font-semibold text-gray-800">Especialidades</Text>
