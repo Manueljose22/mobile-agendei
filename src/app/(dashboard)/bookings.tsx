@@ -25,6 +25,7 @@ export default function Bookings() {
   const appointmentsQuery = useAppointmentsQuery();
   const queryClient = useQueryClient();
   const [selectedStatus, setSelectedStatus] = useState<BookingStatus>("Pendente");
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
   const bookings = appointmentsQuery.data ?? [];
 
   const statusCounts = useMemo(() => ({
@@ -46,6 +47,8 @@ export default function Bookings() {
   };
 
   const cancelBooking = async (id: string) => {
+    if (cancellingId) return;
+    setCancellingId(id);
     try {
       await AppointmentServices.Cancel(id);
       queryClient.setQueryData<IAppointmentSave[]>(
@@ -58,7 +61,21 @@ export default function Bookings() {
       await queryClient.invalidateQueries({ queryKey: queryKeys.notifications.all });
     } catch (error: any) {
       Alert.alert("Agendamento", error?.message ?? "Não foi possível cancelar o agendamento. Tenta novamente.");
+    } finally {
+      setCancellingId(null);
     }
+  };
+
+  const confirmCancelBooking = (id: string) => {
+    if (cancellingId) return;
+    Alert.alert(
+      "Cancelar consulta",
+      "Tens a certeza de que pretendes cancelar esta consulta? Esta acção não pode ser desfeita.",
+      [
+        { text: "Manter consulta", style: "cancel" },
+        { text: "Sim, cancelar", style: "destructive", onPress: () => { void cancelBooking(id); } }
+      ]
+    );
   };
 
   return (
@@ -134,8 +151,10 @@ export default function Bookings() {
                 doctor={item.doctor}
                 hospital={item.hospitalname}
                 status={item.status}
-                btnCancel={() => cancelBooking(item.id)}
+                btnCancel={() => confirmCancelBooking(item.id)}
                 btnUpdate={() => updateBooking(item.id, item.idDoctor, item.idService)}
+                isCancelling={cancellingId === item.id}
+                actionsDisabled={cancellingId !== null}
               />
             )}
           />
