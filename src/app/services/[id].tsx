@@ -119,7 +119,10 @@ export default function Services() {
                     {item.title}
                   </Text>
                   <Text className="text-blue-600 font-semibold">
-                    {item.price} AO
+                    {item.price} Kz
+                  </Text>
+                  <Text className="text-gray-500 text-sm mt-1">
+                    Duração: {item.durationMinutes} min
                   </Text>
                 </View>
 
