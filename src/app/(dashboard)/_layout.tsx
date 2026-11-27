@@ -66,6 +66,17 @@ export default function DashboardLayout() {
           tabBarLabel: "Perfil",
         }}
       />
+
+      <Tabs.Screen
+        name="about"
+        options={{
+          href: null,
+          headerShown: true,
+          headerShadowVisible: false,
+          headerTitleAlign: "center",
+          title: "Sobre o Agendei",
+        }}
+      />
     </Tabs>
   );
 }
