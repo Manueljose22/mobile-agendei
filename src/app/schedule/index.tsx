@@ -177,7 +177,12 @@ export default function Schedule() {
             {selectedHours.map(hour => <Picker.Item key={hour} label={hour} value={hour} />)}
         </Picker>
 
-        <Button loading={loarding} text={idAppointment ? "Actualizar data e horário" : "Finalizar marcação"} onPress={handleSchedule} />
+        <Button
+            loading={loarding}
+            disabled={!seletedDate || !seletedHour}
+            text={idAppointment ? "Actualizar data e horário" : "Finalizar marcação"}
+            onPress={handleSchedule}
+        />
 
         <Modal visible={visible} onRequestClose={() => setVisible(false)} animationType='slide' transparent>
             <View className="flex-1 justify-center items-center bg-black/50 p-6">
