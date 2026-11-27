@@ -13,6 +13,8 @@ type bookingProps = {
     status: string;
     btnCancel: () => void;
     btnUpdate: () => void;
+    isCancelling?: boolean;
+    actionsDisabled?: boolean;
 };
 
 export const Booking = ({
@@ -25,7 +27,9 @@ export const Booking = ({
     hospital,
     hour,
     service,
-    status
+    status,
+    isCancelling = false,
+    actionsDisabled = false
 }: bookingProps) => {
     const isCancelled = status?.toLowerCase() === "cancelado";
 
@@ -67,10 +71,22 @@ export const Booking = ({
 
             {!isCancelled ? (
                 <View className="flex-row items-center gap-2">
-                    <TouchableOpacity onPress={btnCancel} className="bg-red-500 rounded-lg p-3 flex-1">
-                        <Text className="text-white text-center font-semibold">Cancelar</Text>
+                    <TouchableOpacity
+                        onPress={btnCancel}
+                        disabled={actionsDisabled}
+                        activeOpacity={0.8}
+                        className={`rounded-lg p-3 flex-1 ${actionsDisabled ? "bg-red-300" : "bg-red-500"}`}
+                    >
+                        <Text className="text-white text-center font-semibold">
+                            {isCancelling ? "A cancelar..." : "Cancelar"}
+                        </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={btnUpdate} className="bg-blue-500 rounded-lg p-3 flex-1">
+                    <TouchableOpacity
+                        onPress={btnUpdate}
+                        disabled={actionsDisabled}
+                        activeOpacity={0.8}
+                        className={`rounded-lg p-3 flex-1 ${actionsDisabled ? "bg-blue-300" : "bg-blue-500"}`}
+                    >
                         <Text className="text-white text-center font-semibold">Reagendar</Text>
                     </TouchableOpacity>
                 </View>
