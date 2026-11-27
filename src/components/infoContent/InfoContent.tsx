@@ -1,35 +1,48 @@
-import { Link } from 'expo-router';
-import React from 'react';
-import { Text, View } from 'react-native';
-
+import React from "react";
+import { Pressable, Text, View } from "react-native";
+import { Href, router } from "expo-router";
 
 interface InfoContentProps {
     icon: React.ReactNode;
     linkText: string;
     color: string;
-    linkUrl: {
-        pathname: any;
-        params?: Record<string, any>;
-    }
-    onPress?: () => void
+    linkUrl: Href;
+    onPress?: () => void;
 }
 
+export const InfoContent = ({
+    icon,
+    linkText,
+    linkUrl,
+    color,
+    onPress,
+}: InfoContentProps) => {
+    const handlePress = () => {
+        if (onPress) {
+            onPress();
+            return;
+        }
 
+        router.push(linkUrl);
+    };
 
-export const InfoContent = ({ icon, linkText, linkUrl, color, onPress }: InfoContentProps) => {
     return (
-        <View className='border-b border-gray-200' >
-            <Link onPress={onPress} href={linkUrl}>
-                <View className='flex flex-row items-center py-5 gap-3'>
-                    {icon}
-                    <Text className={`${color === 'default' ? "text-base ms-2 font-medium" : "text-base ms-2 font-medium text-red-600"}`} >
-                        {linkText}
-                    </Text>
-                </View>
-            </Link>
-        </View>
-    )
-}
-
-
-
+        <Pressable
+            onPress={handlePress}
+            accessibilityRole="button"
+            accessibilityLabel={linkText}
+            className="border-b border-gray-200"
+        >
+            <View className="flex-row items-center gap-3 py-5">
+                {icon}
+                <Text
+                    className={color === "default"
+                        ? "ms-2 text-base font-medium"
+                        : "ms-2 text-base font-medium text-red-600"}
+                >
+                    {linkText}
+                </Text>
+            </View>
+        </Pressable>
+    );
+};
