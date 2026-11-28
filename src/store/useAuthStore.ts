@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";\nimport { queryClient } from "@/src/providers/QueryProvider";
 
 const secureStore = {
   getItem: async (name: string) => SecureStore.getItemAsync(name),
@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       hasHydrated: false,
-      setUser: (user) => set({ user }),
+      setUser: (user) => {\n        queryClient.clear();\n        set({ user });\n      },
       logout: async () => {
         const user = get().user;
         try {
