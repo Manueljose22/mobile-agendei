@@ -72,7 +72,7 @@ export default function Schedule() {
     const [seletedDate, setSeletedDate] = useState('');
     const [loarding, setLoarding] = useState(false);
     const [visible, setVisible] = useState(false);
-    const periods = data?.availabilities ?? [];
+    const periods = useMemo(() => data?.availabilities ?? [], [data?.availabilities]);
     const availableDates = useMemo(
         () => new Set(periods.filter(period => !period.isBlocked).map(period => dateKey(period.date))),
         [periods]
