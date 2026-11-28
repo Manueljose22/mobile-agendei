@@ -26,7 +26,7 @@ export default function Bookings() {
   const queryClient = useQueryClient();
   const [selectedStatus, setSelectedStatus] = useState<BookingStatus>("Pendente");
   const [cancellingId, setCancellingId] = useState<string | null>(null);
-  const bookings = appointmentsQuery.data ?? [];
+  const bookings = useMemo(() => appointmentsQuery.data ?? [], [appointmentsQuery.data]);
 
   const statusCounts = useMemo(() => ({
     Pendente: bookings.filter(item => normalizeStatus(item.status) === "Pendente").length,
