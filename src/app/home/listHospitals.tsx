@@ -14,7 +14,7 @@ import {
 export default function ListHospitals() {
   const [search, setSearch] = useState("");
   const hospitalsQuery = useHospitalsQuery();
-  const hospitals = hospitalsQuery.data ?? [];
+  const hospitals = useMemo(() => hospitalsQuery.data ?? [], [hospitalsQuery.data]);
 
   const filteredHospitals = useMemo(() => {
     const term = search.trim().toLowerCase();
