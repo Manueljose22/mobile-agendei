@@ -1,7 +1,8 @@
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";\nimport { queryClient } from "@/src/providers/QueryProvider";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { queryClient } from "@/src/providers/QueryProvider";
 
 const secureStore = {
   getItem: async (name: string) => SecureStore.getItemAsync(name),
@@ -26,9 +27,13 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       hasHydrated: false,
-      setUser: (user) => {\n        queryClient.clear();\n        set({ user });\n      },
+      setUser: (user) => {
+        queryClient.clear();
+        set({ user });
+      },
       logout: async () => {
         const user = get().user;
+        queryClient.clear();
         try {
           const expoPushToken = await SecureStore.getItemAsync(PUSH_TOKEN_STORAGE_KEY);
           if (user?.token && expoPushToken) {
@@ -42,6 +47,7 @@ export const useAuthStore = create<AuthState>()(
         } catch {
           // A sessão é encerrada mesmo se o dispositivo estiver sem rede.
         } finally {
+          queryClient.clear();
           set({ user: null });
         }
       },
