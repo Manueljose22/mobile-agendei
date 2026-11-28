@@ -26,7 +26,7 @@ export default function AboutScreen() {
 
     return (
         <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+            <StatusBar barStyle="dark-content" />
             <ScrollView
                 className="flex-1"
                 contentContainerStyle={{ padding: 20, paddingBottom: 36 }}
