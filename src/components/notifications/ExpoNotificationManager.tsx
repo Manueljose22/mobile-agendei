@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { router } from "expo-router";
 import * as Notifications from "expo-notifications";
+import { AndroidImportance } from "expo-notifications";
 import * as Device from "expo-device";
 import * as SecureStore from "expo-secure-store";
 import Constants from "expo-constants";
@@ -33,7 +34,7 @@ export default function ExpoNotificationManager() {
         if (Platform.OS === "android") {
           await Notifications.setNotificationChannelAsync("default", {
             name: "Notificações",
-            importance: Notifications.AndroidImportance.MAX,
+            importance: AndroidImportance.MAX,
             vibrationPattern: [0, 250, 250, 250],
             sound: "default",
           });
